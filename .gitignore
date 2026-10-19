@@ -1,0 +1,13 @@
+bin/
+obj/
+.vs/
+dist/
+dist2/
+*.user
+*_wpftmp.csproj
+payload.zip
+# Ne JAMAIS publier : clé privée de signature des mises à jour et sorties de compilation
+keys/
+Installateur/
+tools/
+*.pem

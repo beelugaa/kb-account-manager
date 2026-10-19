@@ -1,0 +1,24 @@
+<Window Style="{StaticResource {x:Type Window}}" x:Class="BBManager.Views.FirstRunDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Bienvenue" Width="480" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen" Background="{StaticResource Bg1Brush}">
+    <StackPanel Margin="30,28,30,24">
+        <Border Width="64" Height="64" CornerRadius="16" ClipToBounds="True" Background="#00020F" BorderBrush="{StaticResource LineBrush}"
+                BorderThickness="1" HorizontalAlignment="Left">
+            <Image Source="/Assets/logo.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
+        </Border>
+        <TextBlock Text="Protéger l'appli par un mot de passe ?" Style="{StaticResource H1}" TextWrapping="Wrap" Margin="0,16,0,0"/>
+        <TextBlock TextWrapping="Wrap" Foreground="{StaticResource DimBrush}" LineHeight="20" Margin="0,10,0,0">
+            Avec un mot de passe, KB Manager te le demandera à chaque lancement (et après inactivité), et tes cookies seront chiffrés avec.
+            Sans mot de passe, ils sont chiffrés avec ta session Windows : pratique, mais un programme malveillant lancé sous ton compte pourrait les lire.
+        </TextBlock>
+        <TextBlock TextWrapping="Wrap" Style="{StaticResource Caption}" Margin="0,10,0,0">
+            Tu pourras le changer ou le retirer plus tard dans Paramètres &gt; Sécurité.
+        </TextBlock>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
+            <Button Content="Non merci" Margin="0,0,10,0" Padding="18,8" Click="OnNo"/>
+            <Button Content="Définir un mot de passe" Style="{StaticResource PrimaryButton}" Padding="18,8" Click="OnSet"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

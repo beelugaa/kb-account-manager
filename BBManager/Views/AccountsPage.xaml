@@ -1,0 +1,269 @@
+<UserControl x:Class="BBManager.Views.AccountsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <!-- En-tête de groupe repliable -->
+        <Style x:Key="GroupToggle" TargetType="ToggleButton">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="Transparent" Padding="2,8,2,6">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="arrow" FontFamily="{StaticResource IconFont}" Text="&#xE70D;" FontSize="10"
+                                           Foreground="{StaticResource DimBrush}" VerticalAlignment="Center" Width="18"/>
+                                <ContentPresenter VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="False"><Setter TargetName="arrow" Property="Text" Value="&#xE76C;"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="IconBtn" TargetType="Button" BasedOn="{StaticResource GhostButton}">
+            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Width" Value="34"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+
+        <DataTemplate x:Key="AccountRow">
+            <Grid Margin="14,10" Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="46"/>
+                    <ColumnDefinition Width="*" MinWidth="140"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="86"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Width="42" Height="42" HorizontalAlignment="Left">
+                    <Ellipse Fill="{StaticResource Bg4Brush}"/>
+                    <Ellipse><Ellipse.Fill><ImageBrush ImageSource="{Binding AvatarUrl}" Stretch="UniformToFill"/></Ellipse.Fill></Ellipse>
+                    <Ellipse Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-1,-1"
+                             Fill="{Binding StatusKind, Converter={StaticResource StatusBrush}}" Stroke="{StaticResource Bg2Brush}" StrokeThickness="2"/>
+                </Grid>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="4,0,10,0" ToolTip="{Binding Notes}">
+                    <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="14"/>
+                    <TextBlock Text="{Binding SubTitle}" Style="{StaticResource Caption}" TextWrapping="NoWrap"/>
+                </StackPanel>
+
+                <Border Grid.Column="2" Style="{StaticResource Chip}" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Background="{Binding GroupColor, Converter={StaticResource ColorSoftBrush}}">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="7" Height="7" Fill="{Binding GroupColor, Converter={StaticResource ColorBrush}}" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding GroupName}" FontSize="11.5" MaxWidth="90"/>
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding StatusText}" FontSize="12.5"
+                               Foreground="{Binding StatusKind, Converter={StaticResource StatusBrush}}"/>
+                    <TextBlock Text="{Binding LastUsedText, StringFormat='dernier : {0}'}" Style="{StaticResource Caption}" TextWrapping="NoWrap"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding RamText}" FontWeight="Medium"/>
+                    <TextBlock Text="{Binding UptimeText}" Style="{StaticResource Caption}"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="5" Text="{Binding RobuxText}" VerticalAlignment="Center" Foreground="{StaticResource DimBrush}"/>
+
+                <StackPanel Grid.Column="6" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource IconBtn}" Content="&#xE768;" ToolTip="Lancer" Click="OnRowLaunch" Foreground="{StaticResource GoodBrush}"/>
+                    <Button Style="{StaticResource IconBtn}" Content="&#xE71A;" ToolTip="Fermer l'instance" Click="OnRowClose"/>
+                    <Button Style="{StaticResource IconBtn}" Content="&#xE70F;" ToolTip="Modifier" Click="OnRowEdit"/>
+                    <Button Style="{StaticResource IconBtn}" Content="&#xE712;" ToolTip="Plus d'actions" Click="OnRowMore"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Margin="26,22,26,12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ============ En-tête ============ -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="Comptes" Style="{StaticResource H1}"/>
+                <TextBlock x:Name="CountText" Style="{StaticResource Caption}" Margin="0,2,0,0"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Grid Width="230" Margin="0,0,8,0">
+                    <TextBox x:Name="SearchBox" TextChanged="OnSearchChanged" Padding="32,7,10,7"/>
+                    <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE721;" Foreground="{StaticResource DimBrush}"
+                               IsHitTestVisible="False" VerticalAlignment="Center" Margin="11,0,0,0"/>
+                    <TextBlock x:Name="SearchHint" Text="Rechercher un compte…" Style="{StaticResource Dim}"
+                               IsHitTestVisible="False" VerticalAlignment="Center" Margin="33,0,0,0"/>
+                </Grid>
+                <ComboBox x:Name="SortBox" Width="180" Margin="0,0,8,0" SelectionChanged="OnSortChanged" ToolTip="Tri"/>
+                <CheckBox x:Name="GroupToggle" Content="Grouper" Margin="6,0,14,0" VerticalAlignment="Center" Click="OnGroupToggle"/>
+                <Button FontFamily="{StaticResource IconFont}" Content="&#xE72C;" Width="38" Margin="0,0,8,0" Padding="0,7"
+                        ToolTip="Vérifier tous les comptes (cookies, Robux, avatars)" Click="OnRefreshAll"/>
+                <Button Style="{StaticResource PrimaryButton}" Click="OnAddClick" x:Name="AddBtn" AutomationProperties.Name="Ajouter un compte">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE710;" Foreground="White" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Ajouter" Foreground="White"/>
+                    </StackPanel>
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Ajouter via cookie(s) / import en masse…" Click="OnAddCookies"/>
+                            <MenuItem Header="Se connecter via le navigateur…" Click="OnAddBrowser"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- ============ Groupes (pastilles) ============ -->
+        <WrapPanel x:Name="Chips" Grid.Row="1" Margin="0,16,0,0"/>
+
+        <!-- ============ Barre de lancement ============ -->
+        <Border Grid.Row="2" Style="{StaticResource Card}" Margin="0,16,0,14" Padding="16,14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <TextBlock Text="Jeu (Place ID ou lien)" Style="{StaticResource Caption}" Margin="2,0,0,4"/>
+                        <ComboBox x:Name="PlaceBox" Width="250" IsEditable="True" DisplayMemberPath="Label" TextSearch.TextPath="Label"/>
+                    </StackPanel>
+                    <Button x:Name="StarBtn" FontFamily="{StaticResource IconFont}" Content="&#xE734;" Width="36" Margin="6,19,0,0" Padding="0,7"
+                            ToolTip="Enregistrer ce jeu dans la liste" Click="OnSavePlace"/>
+                    <Button x:Name="UnstarBtn" FontFamily="{StaticResource IconFont}" Content="&#xE74D;" Width="36" Margin="6,19,0,0" Padding="0,7"
+                            ToolTip="Retirer ce jeu de la liste" Click="OnRemovePlace"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="14,0,0,0">
+                    <TextBlock Text="Mode" Style="{StaticResource Caption}" Margin="2,0,0,4"/>
+                    <ComboBox x:Name="ModeBox" Width="160" SelectionChanged="OnModeChanged" DisplayMemberPath="Label" SelectedValuePath="Value"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="14,0,14,0" x:Name="ValuePanel" Visibility="Collapsed">
+                    <TextBlock x:Name="ValueLabel" Style="{StaticResource Caption}" Margin="2,0,0,4"/>
+                    <TextBox x:Name="ValueBox"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                    <Button x:Name="CancelBtn" Content="Annuler le lancement" Style="{StaticResource DangerButton}" Margin="0,0,8,0" Visibility="Collapsed" Click="OnCancelLaunch"/>
+                    <Button x:Name="LaunchSelBtn" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0" Click="OnLaunchSelected" Padding="16,8">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE768;" Foreground="White" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="LaunchSelText" Text="Lancer" Foreground="White"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="LaunchAllBtn" Content="Tout lancer" Padding="16,8" Click="OnLaunchAll" Margin="0,0,8,0"
+                            ToolTip="Lance tous les comptes affichés (groupe/filtre en cours)"/>
+                    <Button Content="＋ Profil" Padding="14,8" Click="OnSaveProfile"
+                            ToolTip="Enregistre les comptes sélectionnés et ce jeu comme profil de lancement (onglet Profils)"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ============ Liste ============ -->
+        <Grid Grid.Row="3">
+            <ListBox x:Name="List" Style="{StaticResource PlainList}" SelectionMode="Extended" AllowDrop="True"
+                     ItemTemplate="{StaticResource AccountRow}" Padding="0,0,6,0"
+                     KeyDown="OnListKeyDown" MouseDoubleClick="OnListDoubleClick" SelectionChanged="OnSelectionChanged"
+                     PreviewMouseLeftButtonDown="OnListMouseDown" PreviewMouseMove="OnListMouseMove"
+                     DragOver="OnListDragOver" Drop="OnListDrop" ContextMenuOpening="OnContextOpening">
+                <ListBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="GroupItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="GroupItem">
+                                            <StackPanel Margin="0,0,0,6">
+                                                <ToggleButton x:Name="hdr" IsChecked="True" Style="{StaticResource GroupToggle}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Ellipse Width="9" Height="9" Margin="0,0,8,0" VerticalAlignment="Center"
+                                                                 Fill="{Binding Name, Converter={StaticResource GroupNameColor}}"/>
+                                                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                                                        <TextBlock Text="{Binding ItemCount, StringFormat='  ·  {0}'}" Style="{StaticResource Dim}"/>
+                                                    </StackPanel>
+                                                </ToggleButton>
+                                                <ItemsPresenter x:Name="items"/>
+                                            </StackPanel>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger SourceName="hdr" Property="IsChecked" Value="False">
+                                                    <Setter TargetName="items" Property="Visibility" Value="Collapsed"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ListBox.GroupStyle>
+                <ListBox.ContextMenu>
+                    <ContextMenu x:Name="RowMenu">
+                        <MenuItem Header="Lancer" Click="OnMenuLaunch"/>
+                        <MenuItem Header="Fermer l'instance" Click="OnMenuClose"/>
+                        <MenuItem Header="Mettre au premier plan" Click="OnMenuFocus"/>
+                        <Separator/>
+                        <MenuItem Header="Modifier…" Click="OnMenuEdit"/>
+                        <MenuItem Header="Modifier la sélection (réglages groupés)…" Click="OnBulkEdit"/>
+                        <MenuItem x:Name="MoveMenu" Header="Déplacer vers le groupe"/>
+                        <MenuItem Header="Vérifier / actualiser" Click="OnMenuRefresh"/>
+                        <Separator/>
+                        <MenuItem Header="Ouvrir le profil Roblox" Click="OnMenuProfile"/>
+                        <MenuItem Header="Copier le nom d'utilisateur" Click="OnMenuCopyName"/>
+                        <MenuItem Header="Copier le cookie" Click="OnMenuCopyCookie"/>
+                        <Separator/>
+                        <MenuItem Header="Supprimer" Click="OnMenuDelete"/>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
+
+            <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
+                <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE716;" FontSize="44" Foreground="{StaticResource FaintBrush}" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="EmptyTitle" Text="Aucun compte" Style="{StaticResource H2}" HorizontalAlignment="Center" Margin="0,12,0,4"/>
+                <TextBlock x:Name="EmptyText" Style="{StaticResource Dim}" HorizontalAlignment="Center" TextAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- ============ Barre de sélection ============ -->
+        <Border Grid.Row="4" Margin="0,10,0,0" Padding="2,6">
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Tout sélectionner" Style="{StaticResource GhostButton}" Click="OnSelectAll"/>
+                    <Button Content="Aucun" Style="{StaticResource GhostButton}" Click="OnSelectNone"/>
+                    <TextBlock x:Name="SelText" Style="{StaticResource Dim}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Modifier la sélection…" Style="{StaticResource GhostButton}" Click="OnBulkEdit"/>
+                    <Button x:Name="BulkClose" Content="Fermer la sélection" Style="{StaticResource GhostButton}" Click="OnBulkClose"/>
+                    <Button x:Name="BulkRefresh" Content="Vérifier" Style="{StaticResource GhostButton}" Click="OnBulkRefresh"/>
+                    <Button x:Name="BulkDelete" Content="Supprimer" Style="{StaticResource GhostButton}" Foreground="{StaticResource BadBrush}" Click="OnBulkDelete"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

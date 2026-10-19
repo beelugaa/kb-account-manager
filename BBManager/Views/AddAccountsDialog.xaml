@@ -1,0 +1,59 @@
+<Window Style="{StaticResource {x:Type Window}}" x:Class="BBManager.Views.AddAccountsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Ajouter des comptes" Width="620" Height="560" MinHeight="460"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Background="{StaticResource Bg1Brush}">
+    <Grid Margin="26,24,26,22">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Style="{StaticResource H1}" Text="Ajouter des comptes"/>
+            <TextBlock Style="{StaticResource Caption}" Margin="0,6,0,14">
+                Colle un ou plusieurs cookies <Run FontWeight="SemiBold">.ROBLOSECURITY</Run> (un par ligne, ou même
+                <Run FontWeight="SemiBold">user:mdp:cookie</Run> — le cookie est détecté automatiquement).
+                Un compte déjà présent voit simplement son cookie mis à jour.
+            </TextBlock>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <TextBox x:Name="Input" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                     VerticalContentAlignment="Top" FontFamily="Consolas" FontSize="12"/>
+            <ListBox x:Name="Results" Visibility="Collapsed" Style="{StaticResource PlainList}" Background="{StaticResource Bg2Brush}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="12,6"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem"><ContentPresenter Margin="{TemplateBinding Padding}"/></ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Groupe :" VerticalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource Dim}"/>
+            <ComboBox x:Name="GroupBox" Grid.Column="1" DisplayMemberPath="Name"/>
+            <Button Grid.Column="2" Content="Importer un fichier…" HorizontalAlignment="Right" Click="OnImportFile"/>
+        </Grid>
+
+        <Grid Grid.Row="3" Margin="0,18,0,0">
+            <TextBlock x:Name="Progress" VerticalAlignment="Center" Style="{StaticResource Dim}"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="CloseBtn" Content="Fermer" Margin="0,0,8,0" Click="OnClose"/>
+                <Button x:Name="AddBtn" Content="Ajouter" Style="{StaticResource PrimaryButton}" Click="OnAdd" Padding="22,7"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

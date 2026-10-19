@@ -1,0 +1,23 @@
+<Application x:Class="BBManager.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:core="clr-namespace:BBManager.Core"
+             ShutdownMode="OnExplicitShutdown">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/Dark.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <core:ColorBrushConverter x:Key="ColorBrush"/>
+            <core:ColorSoftBrushConverter x:Key="ColorSoftBrush"/>
+            <core:StatusBrushConverter x:Key="StatusBrush"/>
+            <core:InverseBoolConverter x:Key="InverseBool"/>
+            <core:StringVisibleConverter x:Key="StringVisible"/>
+            <core:RamLimitTextConverter x:Key="RamLimitText"/>
+            <core:GroupNameColorConverter x:Key="GroupNameColor"/>
+            <BooleanToVisibilityConverter x:Key="BoolVisible"/>
+            <FontFamily x:Key="IconFont">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

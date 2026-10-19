@@ -1,0 +1,68 @@
+<Window Style="{StaticResource {x:Type Window}}" x:Class="BBManager.Views.EditAccountDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Modifier le compte" Width="500" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Background="{StaticResource Bg1Brush}">
+    <StackPanel Margin="26,24,26,22">
+        <StackPanel Orientation="Horizontal">
+            <Border Width="46" Height="46" CornerRadius="23" Background="{StaticResource Bg3Brush}" ClipToBounds="True">
+                <Image x:Name="Avatar" Stretch="UniformToFill"/>
+            </Border>
+            <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">
+                <TextBlock x:Name="NameText" Style="{StaticResource H2}" FontSize="16"/>
+                <TextBlock x:Name="IdText" Style="{StaticResource Caption}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <TextBlock Text="Pseudo affiché dans l'appli (alias)" Style="{StaticResource Caption}" Margin="0,18,0,5"/>
+        <TextBox x:Name="AliasBox"/>
+
+        <Grid Margin="0,12,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="Groupe" Style="{StaticResource Caption}" Margin="0,0,0,5"/>
+                <ComboBox x:Name="GroupBox" DisplayMemberPath="Name"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="Place ID par défaut (optionnel)" Style="{StaticResource Caption}" Margin="0,0,0,5"/>
+                <TextBox x:Name="PlaceBox"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Margin="0,12,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="Limite RAM de ce compte (Mo, 0 = réglage global)" Style="{StaticResource Caption}" Margin="0,0,0,5"/>
+                <TextBox x:Name="RamBox"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2" VerticalAlignment="Bottom">
+                <CheckBox x:Name="AfkBox" Content="Anti-AFK" Margin="0,0,0,10"
+                          ToolTip="Désactive pour ce compte l'anti-AFK global (Paramètres)."/>
+                <CheckBox x:Name="KeepAliveBox" Content="Relancer automatiquement" VerticalAlignment="Center" Margin="0,0,0,8"
+                          ToolTip="Si la fenêtre se ferme toute seule (crash, kick…), le compte est relancé sur le même jeu."/>
+            </StackPanel>
+        </Grid>
+
+        <TextBlock Text="Notes" Style="{StaticResource Caption}" Margin="0,12,0,5"/>
+        <TextBox x:Name="NotesBox" Height="64" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top"/>
+
+        <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+            <Button Content="Copier le cookie" Click="OnCopyCookie" Margin="0,0,8,0"/>
+            <Button Content="Remplacer le cookie…" Click="OnReplaceCookie"/>
+        </StackPanel>
+        <TextBlock x:Name="Info" Style="{StaticResource Caption}" Margin="0,8,0,0"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
+            <Button Content="Annuler" Margin="0,0,8,0" Click="OnCancel"/>
+            <Button Content="Enregistrer" Style="{StaticResource PrimaryButton}" Click="OnSave"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

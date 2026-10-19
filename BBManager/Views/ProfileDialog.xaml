@@ -1,0 +1,97 @@
+<Window Style="{StaticResource {x:Type Window}}" x:Class="BBManager.Views.ProfileDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Profil de lancement" Width="600" Height="760" MinHeight="560"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Background="{StaticResource Bg1Brush}">
+    <Grid Margin="28,24,28,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="TitleText" Text="Nouveau profil" Style="{StaticResource H1}"/>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,14,0,0" Padding="0,0,10,0">
+            <StackPanel>
+                <TextBlock Text="Nom du profil" Style="{StaticResource Caption}" Margin="0,0,0,5"/>
+                <TextBox x:Name="NameBox" MaxLength="60"/>
+
+                <Grid Margin="0,18,0,6">
+                    <TextBlock Text="Comptes du profil" FontWeight="Medium" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Tout cocher" Style="{StaticResource GhostButton}" Click="OnCheckAll"/>
+                        <Button Content="Aucun" Style="{StaticResource GhostButton}" Click="OnCheckNone"/>
+                    </StackPanel>
+                </Grid>
+                <TextBox x:Name="SearchBox" TextChanged="OnSearch" ToolTip="Filtrer la liste"/>
+                <Border Style="{StaticResource Card}" Padding="6" Margin="0,8,0,0" Height="190">
+                    <ListBox x:Name="AccountList" Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Template">
+                                    <Setter.Value><ControlTemplate TargetType="ListBoxItem"><ContentPresenter/></ControlTemplate></Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="6,4">
+                                    <CheckBox IsChecked="{Binding Selected}" VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Account.Title}" FontWeight="Medium"/>
+                                            <TextBlock Text="{Binding Account.GroupName, StringFormat='   ·  {0}'}" Style="{StaticResource Dim}"/>
+                                        </StackPanel>
+                                    </CheckBox>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Border>
+                <TextBlock x:Name="CountText" Style="{StaticResource Caption}" Margin="2,6,0,0"/>
+
+                <TextBlock Text="Jeu à rejoindre" FontWeight="Medium" Margin="0,18,0,8"/>
+                <Grid>
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="12"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <ComboBox x:Name="ModeBox" SelectionChanged="OnModeChanged"/>
+                    <ComboBox x:Name="PlaceBox" Grid.Column="2" IsEditable="True" TextSearch.TextPath="Label"/>
+                </Grid>
+                <TextBox x:Name="ValueBox" Margin="0,8,0,0" Visibility="Collapsed"/>
+                <TextBlock x:Name="GameHint" Style="{StaticResource Caption}" Margin="2,6,0,0"/>
+
+                <Grid Margin="0,18,0,0">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="12"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Limite de RAM pendant ce profil (Mo)" Style="{StaticResource Caption}" Margin="0,0,0,5"/>
+                        <TextBox x:Name="RamBox" ToolTip="0 = la limite habituelle de chaque compte"/>
+                    </StackPanel>
+                    <CheckBox x:Name="TileBox" Grid.Column="2" Content="Ranger les fenêtres ensuite" VerticalAlignment="Bottom" Margin="0,0,0,8"/>
+                </Grid>
+
+                <Border Style="{StaticResource Card}" Margin="0,18,0,0" Padding="16,14">
+                    <StackPanel>
+                        <CheckBox x:Name="SchedBox" Content="Lancer ce profil automatiquement"/>
+                        <StackPanel x:Name="SchedPanel" Margin="0,12,0,0" IsEnabled="{Binding IsChecked, ElementName=SchedBox}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="À" VerticalAlignment="Center" Style="{StaticResource Dim}" Margin="0,0,10,0"/>
+                                <TextBox x:Name="TimeBox" Width="90" ToolTip="Heure au format HH:mm, par exemple 18:30"/>
+                                <TextBlock Text="(HH:mm)" VerticalAlignment="Center" Style="{StaticResource Caption}" Margin="10,0,0,0"/>
+                            </StackPanel>
+                            <WrapPanel x:Name="DaysPanel" Margin="0,12,0,0"/>
+                            <TextBlock Style="{StaticResource Caption}" Margin="0,8,0,0"
+                                       Text="Aucun jour coché = tous les jours. L'appli doit être ouverte (la barre système suffit) à l'heure prévue."/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Margin="0,14,0,0">
+            <TextBlock x:Name="ErrText" Foreground="{StaticResource BadBrush}" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,0,0,10"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Annuler" Margin="0,0,10,0" Click="OnCancel"/>
+                <Button Content="Enregistrer" Style="{StaticResource PrimaryButton}" Padding="22,8" Click="OnSave"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,151 @@
+<UserControl x:Class="BBManager.Views.AfkPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="IconBtn" TargetType="Button" BasedOn="{StaticResource GhostButton}">
+            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Width" Value="34"/>
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="26,22,26,12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ============ En-tête ============ -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="Anti-AFK" Style="{StaticResource H1}"/>
+                <TextBlock x:Name="Summary" Style="{StaticResource Caption}" Margin="0,2,0,0"/>
+            </StackPanel>
+            <CheckBox x:Name="ShowAllBox" Grid.Column="1" VerticalAlignment="Center" Content="Afficher aussi les comptes hors ligne" Click="OnShowAll"/>
+        </Grid>
+
+        <!-- ============ Réglages globaux ============ -->
+        <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,16,0,14" Padding="18,14">
+            <StackPanel>
+                <CheckBox x:Name="MasterBox" VerticalAlignment="Center" Content="Anti-AFK activé (interrupteur général)" Click="OnGlobalChanged"/>
+                <WrapPanel Margin="0,12,0,0">
+                    <StackPanel Margin="0,0,14,8">
+                        <TextBlock Text="Méthode par défaut" Style="{StaticResource Caption}" Margin="2,0,0,4"/>
+                        <ComboBox x:Name="GlobalMethodBox" Width="230" SelectionChanged="OnGlobalMethodChanged"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,14,8">
+                        <TextBlock Text="Intervalle par défaut (s)" Style="{StaticResource Caption}" Margin="2,0,0,4"/>
+                        <TextBox x:Name="GlobalIntervalBox" Width="130" TextChanged="OnGlobalIntervalChanged"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,14,8">
+                        <TextBlock Text="Pause entre deux comptes (s)" Style="{StaticResource Caption}" Margin="2,0,0,4"/>
+                        <TextBox x:Name="GlobalGapBox" Width="130" TextChanged="OnGlobalGapChanged"
+                                 ToolTip="Un seul compte à la fois : après chaque compte, l'appli attend ce délai avant le suivant."/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,8">
+                        <TextBlock Text="Attendre mon inactivité (s)" Style="{StaticResource Caption}" Margin="2,0,0,4"/>
+                        <TextBox x:Name="GlobalGateBox" Width="130" TextChanged="OnGlobalGateChanged"
+                                 ToolTip="L'anti-AFK ne s'exécute que si tu n'as touché ni clavier ni souris depuis ce délai."/>
+                    </StackPanel>
+                </WrapPanel>
+                <TextBlock Style="{StaticResource Caption}" Margin="0,12,0,0">
+                    Roblox expulse un joueur après ~20 min sans entrée. Il ne réagit qu'à de vraies touches, et seulement si sa fenêtre
+                    est au premier plan (testé : les messages Windows en arrière-plan sont ignorés). Chaque fenêtre prend donc le focus
+                    ~1 s, puis tu retrouves la tienne ; les comptes passent un par un, avec une pause entre chaque. L'envoi attend que tu sois inactif et s'annule si tu touches au clavier ou à la souris.
+                    Garde l'intervalle sous 1200 s (600 s recommandé).
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <!-- ============ Liste ============ -->
+        <Grid Grid.Row="2">
+            <ListBox x:Name="List" Style="{StaticResource PlainList}" SelectionMode="Extended" Padding="0,0,6,0"
+                     SelectionChanged="OnSelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="14,10" Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="46"/>
+                                <ColumnDefinition Width="*" MinWidth="150"/>
+                                <ColumnDefinition Width="*" MinWidth="230"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Width="42" Height="42" HorizontalAlignment="Left">
+                                <Ellipse Fill="{StaticResource Bg4Brush}"/>
+                                <Ellipse><Ellipse.Fill><ImageBrush ImageSource="{Binding AvatarUrl}" Stretch="UniformToFill"/></Ellipse.Fill></Ellipse>
+                                <Ellipse Width="12" Height="12" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-1,-1"
+                                         Fill="{Binding StatusKind, Converter={StaticResource StatusBrush}}" Stroke="{StaticResource Bg2Brush}" StrokeThickness="2"/>
+                            </Grid>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="4,0,10,0">
+                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="14"/>
+                                <TextBlock Text="{Binding StatusText}" Style="{StaticResource Caption}" TextWrapping="NoWrap"
+                                           Foreground="{Binding StatusKind, Converter={StaticResource StatusBrush}}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,0,12,0">
+                                <TextBlock Text="{Binding AfkText}" TextWrapping="NoWrap"
+                                           Visibility="{Binding AfkText, Converter={StaticResource StringVisible}}"/>
+                                <TextBlock Text="{Binding AfkConfigText}" Style="{StaticResource Caption}" TextWrapping="NoWrap"/>
+                            </StackPanel>
+
+                            <CheckBox Grid.Column="3" IsChecked="{Binding AntiAfk}" VerticalAlignment="Center" Margin="0,0,10,0"
+                                      ToolTip="Anti-AFK pour ce compte" Click="OnRowToggle"/>
+                            <Button Grid.Column="4" Style="{StaticResource IconBtn}" Content="&#xE768;" ToolTip="Envoyer l'AFK maintenant"
+                                    Click="OnRowSend"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE823;" FontSize="44" Foreground="{StaticResource FaintBrush}" HorizontalAlignment="Center"/>
+                <TextBlock Text="Aucun compte en jeu" Style="{StaticResource H2}" HorizontalAlignment="Center" Margin="0,12,0,4"/>
+                <TextBlock Text="Lance des comptes, ou coche « Afficher aussi les comptes hors ligne » pour préparer leurs réglages."
+                           Style="{StaticResource Dim}" TextAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- ============ Actions sur la sélection ============ -->
+        <Border Grid.Row="3" Style="{StaticResource Card}" Margin="0,10,0,0" Padding="16,12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Tout sélectionner" Style="{StaticResource GhostButton}" Click="OnSelectAll"/>
+                        <Button Content="Aucun" Style="{StaticResource GhostButton}" Click="OnSelectNone"/>
+                        <TextBlock x:Name="SelText" Style="{StaticResource Dim}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <TextBlock x:Name="ActionResult" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource Dim}"/>
+                </Grid>
+
+                <WrapPanel Grid.Row="1" Margin="0,10,0,0">
+                    <Button Content="Activer" Margin="0,0,8,6" Click="OnEnable"/>
+                    <Button Content="Désactiver" Margin="0,0,18,6" Click="OnDisable"/>
+
+                    <TextBox x:Name="BulkInterval" Width="90" Margin="0,0,6,6" ToolTip="Intervalle en secondes. 0 = utiliser l'intervalle par défaut."/>
+                    <Button Content="Appliquer l'intervalle" Margin="0,0,18,6" Click="OnApplyInterval"/>
+
+                    <ComboBox x:Name="BulkMethodBox" Width="190" Margin="0,0,6,6"/>
+                    <Button Content="Appliquer la méthode" Margin="0,0,18,6" Click="OnApplyMethod"/>
+
+                    <Button Style="{StaticResource PrimaryButton}" Content="Envoyer maintenant" Margin="0,0,0,6" Click="OnSendNow"/>
+                </WrapPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

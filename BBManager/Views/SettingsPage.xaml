@@ -1,0 +1,372 @@
+<UserControl x:Class="BBManager.Views.SettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="Section" TargetType="Border" BasedOn="{StaticResource Card}">
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="Padding" Value="22,20"/>
+        </Style>
+        <Style x:Key="SectionIcon" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+            <Setter Property="Margin" Value="0,2,12,0"/>
+        </Style>
+        <Style x:Key="Row" TargetType="Grid">
+            <Setter Property="Margin" Value="0,14,0,0"/>
+        </Style>
+        <Style x:Key="PresetBtn" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer x:Name="Scroller" VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+        <StackPanel x:Name="Content" Margin="26,22,26,24" MaxWidth="860" HorizontalAlignment="Left" Width="860">
+            <Grid>
+                <TextBlock Text="Paramètres" Style="{StaticResource H1}"/>
+                <TextBlock x:Name="SaveInfo" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{StaticResource GoodBrush}"/>
+            </Grid>
+            <TextBlock Text="Tout est enregistré automatiquement et appliqué au prochain lancement (ou tout de suite aux instances en cours)."
+                       Style="{StaticResource Caption}" Margin="0,2,0,14"/>
+
+            <WrapPanel Margin="0,0,0,16">
+                <Button Style="{StaticResource PresetBtn}" Padding="12,6" Content="Multi-instance" Tag="SecMulti" Click="OnJump"/>
+                <Button Style="{StaticResource PresetBtn}" Padding="12,6" Content="FPS et client" Tag="SecFps" Click="OnJump"/>
+                <Button Style="{StaticResource PresetBtn}" Padding="12,6" Content="Mémoire et CPU" Tag="SecRam" Click="OnJump"/>
+                <Button Style="{StaticResource PresetBtn}" Padding="12,6" Content="Lancement" Tag="SecLaunch" Click="OnJump"/>
+                <Button Style="{StaticResource PresetBtn}" Padding="12,6" Content="Application" Tag="SecApp" Click="OnJump"/>
+                <Button Style="{StaticResource PresetBtn}" Padding="12,6" Content="Sécurité" Tag="SecSecurity" Click="OnJump"/>
+                <Button Style="{StaticResource PresetBtn}" Padding="12,6" Content="Mises à jour" Tag="SecUpdate" Click="OnJump"/>
+                <Button Style="{StaticResource PresetBtn}" Padding="12,6" Content="Apparence" Tag="SecLook" Click="OnJump"/>
+            </WrapPanel>
+
+            <!-- ================= Multi-instance ================= -->
+            <Border x:Name="SecMulti" Style="{StaticResource Section}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE7F4;"/>
+                        <TextBlock Text="Multi-instance" Style="{StaticResource H2}"/>
+                    </StackPanel>
+                    <CheckBox x:Name="MultiBox" Margin="0,14,0,0" Content="Autoriser plusieurs fenêtres Roblox en même temps"
+                              IsChecked="{Binding MultiInstance}" Click="OnMultiClick"/>
+                    <TextBlock Style="{StaticResource Caption}" Margin="48,6,0,0">
+                        L'appli prend le verrou « ROBLOX_singletonMutex » avant Roblox. Si un Roblox était déjà ouvert quand l'appli a démarré,
+                        ferme-le (Instances &gt; « Fermer tous les Roblox ») puis relance l'appli.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <!-- ================= FPS & client ================= -->
+            <Border x:Name="SecFps" Style="{StaticResource Section}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE9D9;"/>
+                        <TextBlock Text="FPS et client Roblox" Style="{StaticResource H2}"/>
+                    </StackPanel>
+
+                    <CheckBox Margin="0,14,0,0" Content="Débloquer les FPS" IsChecked="{Binding UnlockFps}"/>
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="FPS maximum" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="0 = illimité. Avec plusieurs fenêtres, un plafond plus bas (30–60) allège énormément le CPU/GPU."/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Width="110" Text="{Binding FpsCap, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <Button Style="{StaticResource PresetBtn}" Content="30" Tag="30" Click="OnFpsPreset"/>
+                        <Button Style="{StaticResource PresetBtn}" Content="60" Tag="60" Click="OnFpsPreset"/>
+                        <Button Style="{StaticResource PresetBtn}" Content="144" Tag="144" Click="OnFpsPreset"/>
+                        <Button Style="{StaticResource PresetBtn}" Content="240" Tag="240" Click="OnFpsPreset"/>
+                        <Button Style="{StaticResource PresetBtn}" Content="360" Tag="360" Click="OnFpsPreset"/>
+                        <Button Style="{StaticResource PresetBtn}" Content="Illimité" Tag="0" Click="OnFpsPreset"/>
+                    </StackPanel>
+
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Forcer le mode fenêtré" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="Désactive le plein écran avant chaque lancement (nécessaire pour ranger les fenêtres en grille)."/>
+                        </StackPanel>
+                        <CheckBox Grid.Column="1" IsChecked="{Binding ForceWindowed}"/>
+                    </Grid>
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Graphismes minimum" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="Force la qualité la plus basse : moins de RAM, de CPU et de GPU par instance."/>
+                        </StackPanel>
+                        <CheckBox Grid.Column="1" IsChecked="{Binding LowGraphics}"/>
+                    </Grid>
+
+                    <Separator Margin="0,18,0,6"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="FFlags personnalisés (avancé)" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="Écrits dans ClientAppSettings.json. Roblox ignore (ou refuse) les flags non autorisés : à utiliser à tes risques."/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="＋ Ajouter" Click="OnAddFlag"/>
+                    </Grid>
+                    <ItemsControl x:Name="FlagList" Margin="0,10,0,0">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="170"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox IsChecked="{Binding Enabled}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="1" Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" FontFamily="Consolas" Margin="0,0,8,0"/>
+                                    <TextBox Grid.Column="2" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" FontFamily="Consolas"/>
+                                    <Button Grid.Column="3" Content="&#xE74D;" FontFamily="{StaticResource IconFont}" Style="{StaticResource GhostButton}"
+                                            Margin="6,0,0,0" Click="OnRemoveFlag" ToolTip="Supprimer"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <Button Content="Appliquer maintenant" Click="OnApplyFlags" Margin="0,0,8,0"/>
+                        <Button Content="Ouvrir le dossier du client" Click="OnOpenClientDir" Margin="0,0,8,0"/>
+                        <Button Content="Retirer tous les flags" Style="{StaticResource DangerButton}" Click="OnClearFlags"/>
+                    </StackPanel>
+                    <TextBlock x:Name="ClientInfo" Style="{StaticResource Caption}" Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ================= Mémoire & CPU ================= -->
+            <Border x:Name="SecRam" Style="{StaticResource Section}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE950;"/>
+                        <TextBlock Text="Mémoire et processeur" Style="{StaticResource H2}"/>
+                    </StackPanel>
+
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="RAM maximum par fenêtre Roblox (Mo)" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="0 = illimité. Modifiable aussi par compte (Modifier) ou en direct dans l'onglet Instances."/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Width="110" Text="{Binding DefaultRamLimitMb, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <Button Style="{StaticResource PresetBtn}" Content="1 Go" Tag="1024" Click="OnRamPreset"/>
+                        <Button Style="{StaticResource PresetBtn}" Content="1,5 Go" Tag="1536" Click="OnRamPreset"/>
+                        <Button Style="{StaticResource PresetBtn}" Content="2 Go" Tag="2048" Click="OnRamPreset"/>
+                        <Button Style="{StaticResource PresetBtn}" Content="3 Go" Tag="3072" Click="OnRamPreset"/>
+                        <Button Style="{StaticResource PresetBtn}" Content="4 Go" Tag="4096" Click="OnRamPreset"/>
+                        <Button Style="{StaticResource PresetBtn}" Content="Illimité" Tag="0" Click="OnRamPreset"/>
+                    </StackPanel>
+
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="260"/></Grid.ColumnDefinitions>
+                        <StackPanel Margin="0,0,16,0">
+                            <TextBlock Text="Méthode de limitation" FontWeight="Medium"/>
+                            <TextBlock x:Name="RamModeInfo" Style="{StaticResource Caption}"/>
+                        </StackPanel>
+                        <ComboBox x:Name="RamModeBox" Grid.Column="1" DisplayMemberPath="Label" SelectedValuePath="Value" VerticalAlignment="Top"/>
+                    </Grid>
+
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Vérification de la RAM toutes les (s)" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="Fréquence de contrôle (méthode « souple »)."/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Width="110" Text="{Binding RamCheckSeconds, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+
+                    <Separator Margin="0,18,0,0"/>
+
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="200"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Priorité CPU des instances" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="« Basse » garde le PC fluide pendant que tout tourne."/>
+                        </StackPanel>
+                        <ComboBox x:Name="PriorityBox" Grid.Column="1" DisplayMemberPath="Label" SelectedValuePath="Value"/>
+                    </Grid>
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Cœurs dédiés par instance" FontWeight="Medium"/>
+                            <TextBlock x:Name="CoresInfo" Style="{StaticResource Caption}"/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Width="110" Text="{Binding CoresPerInstance, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+
+                    <Button Content="Appliquer aux instances en cours" HorizontalAlignment="Left" Margin="0,18,0,0" Click="OnApplyRunning"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ================= Lancement & fenêtres ================= -->
+            <Border x:Name="SecLaunch" Style="{StaticResource Section}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE768;"/>
+                        <TextBlock Text="Lancement et fenêtres" Style="{StaticResource H2}"/>
+                    </StackPanel>
+
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Délai entre deux comptes (s)" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="Évite de saturer le PC et les limitations de Roblox quand tu lances un groupe entier."/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Width="110" Text="{Binding LaunchDelaySec, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Délai avant relance automatique (s)" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="Pour les comptes avec « Relancer automatiquement » (menu Modifier)."/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Width="110" Text="{Binding AutoRejoinDelaySec, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+
+                    <Separator Margin="0,18,0,0"/>
+
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Ranger les fenêtres automatiquement après un lancement" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="Dispose les fenêtres en grille sur l'écran choisi."/>
+                        </StackPanel>
+                        <CheckBox Grid.Column="1" IsChecked="{Binding AutoTile}"/>
+                    </Grid>
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="260"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Écran de destination" FontWeight="Medium" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="MonitorBox" Grid.Column="1" DisplayMemberPath="Label" SelectedValuePath="Value"/>
+                    </Grid>
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Colonnes de la grille" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="0 = automatique (grille la plus carrée possible)."/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Width="110" Text="{Binding TileColumns, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Attente avant de ranger (s)" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="Laisse le temps aux fenêtres d'apparaître."/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Width="110" Text="{Binding TileDelaySec, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+
+                    <Separator Margin="0,18,0,0"/>
+
+                    <TextBlock Text="Chemin de RobloxPlayerBeta.exe" FontWeight="Medium" Margin="0,14,0,0"/>
+                    <TextBlock Style="{StaticResource Caption}" Text="Laisse vide pour la détection automatique (version actuelle installée)."/>
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <TextBox Text="{Binding RobloxExePath, UpdateSourceTrigger=PropertyChanged}" FontFamily="Consolas" FontSize="12"/>
+                        <Button Grid.Column="1" Content="Parcourir…" Margin="8,0,0,0" Click="OnBrowseExe"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- ================= Application ================= -->
+            <Border x:Name="SecApp" Style="{StaticResource Section}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE7E8;"/>
+                        <TextBlock Text="Application" Style="{StaticResource H2}"/>
+                    </StackPanel>
+                    <CheckBox Margin="0,14,0,0" Content="Démarrer KB Manager avec Windows" IsChecked="{Binding StartWithWindows}" Click="OnStartupClick"/>
+                    <CheckBox Margin="0,12,0,0" Content="Au démarrage de Windows, démarrer réduit dans la barre système" IsChecked="{Binding StartMinimized}"/>
+                    <CheckBox Margin="0,12,0,0" Content="La croix réduit dans la barre système (clic droit sur l'icône pour quitter)" IsChecked="{Binding CloseToTray}"/>
+                    <TextBlock x:Name="StartupInfo" Style="{StaticResource Caption}" Margin="48,8,0,0"/>
+                    <TextBlock Style="{StaticResource Caption}" Margin="0,14,0,0">
+                        Quitter ou redémarrer l'appli ne ferme pas les Roblox ouverts : ils sont reconnus (compte, RAM, AFK) au prochain démarrage.
+                    </TextBlock>
+                    <Button Content="Quitter KB Manager" Margin="0,14,0,0" HorizontalAlignment="Left" Click="OnQuit"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ================= Mises à jour ================= -->
+            <Border x:Name="SecUpdate" Style="{StaticResource Section}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE896;"/>
+                        <TextBlock Text="Mises à jour" Style="{StaticResource H2}"/>
+                    </StackPanel>
+                    <TextBlock x:Name="VersionInfo" Margin="0,14,0,0" FontWeight="Medium"/>
+                    <TextBlock x:Name="UpdateStatus" Style="{StaticResource Caption}" Margin="0,4,0,0"/>
+                    <CheckBox Margin="0,14,0,0" Content="Chercher les mises à jour automatiquement" IsChecked="{Binding AutoUpdateCheck}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <Button x:Name="CheckUpdateBtn" Content="Vérifier maintenant" Click="OnCheckUpdate" Margin="0,0,8,0"/>
+                        <Button x:Name="InstallUpdateBtn" Content="Installer la mise à jour" Style="{StaticResource PrimaryButton}" Click="OnInstallUpdate" Visibility="Collapsed"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource Caption}" Margin="0,10,0,0"
+                               Text="Chaque mise à jour est signée : l'appli refuse d'installer quoi que ce soit qui ne vienne pas de son éditeur."/>
+                </StackPanel>
+            </Border>
+
+            <!-- ================= Sécurité & données ================= -->
+            <Border x:Name="SecSecurity" Style="{StaticResource Section}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE72E;"/>
+                        <TextBlock Text="Sécurité et données" Style="{StaticResource H2}"/>
+                    </StackPanel>
+
+                    <TextBlock x:Name="CryptoInfo" Margin="0,14,0,0" TextWrapping="Wrap"/>
+                    <TextBlock Style="{StaticResource Caption}" Margin="0,4,0,0">
+                        Les cookies sont chiffrés sur le disque (jamais en clair) et ne partent que vers roblox.com en HTTPS.
+                        Avec un mot de passe, le fichier est chiffré en AES-256 : il est illisible et toute modification est détectée.
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                        <Button x:Name="SetPwdBtn" Content="Définir un mot de passe" Click="OnSetPassword" Margin="0,0,8,0"/>
+                        <Button x:Name="RemovePwdBtn" Content="Retirer le mot de passe" Click="OnRemovePassword"/>
+                    </StackPanel>
+
+                    <Separator Margin="0,18,0,6"/>
+                    <Grid Style="{StaticResource Row}">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Verrouiller après inactivité (minutes)" FontWeight="Medium"/>
+                            <TextBlock Style="{StaticResource Caption}" Text="0 = jamais. Nécessite un mot de passe. Les instances et l'anti-AFK continuent de tourner."/>
+                        </StackPanel>
+                        <TextBox Grid.Column="1" Width="110" Text="{Binding AutoLockMinutes, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                    <CheckBox Margin="0,14,0,0" Content="Verrouiller quand la fenêtre est masquée dans la barre système" IsChecked="{Binding LockOnTray}"/>
+                    <CheckBox Margin="0,12,0,0" Content="Masquer l'appli dans les captures et partages d'écran (Discord, OBS…)" IsChecked="{Binding HideFromCapture}" Click="OnCaptureClick"/>
+                    <Button Content="Verrouiller maintenant (Ctrl+L)" Margin="0,14,0,0" HorizontalAlignment="Left" Click="OnLockNow"/>
+
+                    <Separator Margin="0,18,0,6"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <Button Content="Exporter les comptes (fichier chiffré)…" Click="OnExport" Margin="0,0,8,0"/>
+                        <Button Content="Ouvrir le dossier de données" Click="OnOpenData"/>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource Caption}" Margin="0,8,0,0"
+                               Text="L'export est chiffré avec un mot de passe choisi à ce moment-là. Il se réimporte via Comptes > Ajouter > Importer un fichier."/>
+                    <Button Content="Réinitialiser l'appli…" Style="{StaticResource DangerButton}" Margin="0,16,0,0" HorizontalAlignment="Left" Click="OnResetApp"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ================= Apparence ================= -->
+            <Border x:Name="SecLook" Style="{StaticResource Section}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE790;"/>
+                        <TextBlock Text="Apparence" Style="{StaticResource H2}"/>
+                    </StackPanel>
+                    <TextBlock Text="Couleur d'accent" FontWeight="Medium" Margin="0,14,0,8"/>
+                    <WrapPanel x:Name="AccentPanel"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

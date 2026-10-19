@@ -1,0 +1,14 @@
+<Window Style="{StaticResource {x:Type Window}}" x:Class="BBManager.Views.MessageDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="KB Manager" Width="440" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Background="{StaticResource Bg1Brush}">
+    <StackPanel Margin="26,24,26,22">
+        <TextBlock x:Name="TitleText" Style="{StaticResource H2}" FontSize="16"/>
+        <TextBlock x:Name="Body" Margin="0,10,0,0" TextWrapping="Wrap" Foreground="{StaticResource DimBrush}" LineHeight="20"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,22,0,0">
+            <Button x:Name="CancelBtn" Content="Annuler" Margin="0,0,8,0" Click="OnCancel"/>
+            <Button x:Name="OkBtn" Content="OK" Style="{StaticResource PrimaryButton}" Click="OnOk"/>
+        </StackPanel>
+    </StackPanel>
+</Window>
