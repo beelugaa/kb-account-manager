@@ -10,7 +10,7 @@
     <RootNamespace>KBSetup</RootNamespace>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <Product>KB Account Manager (installateur)</Product>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>

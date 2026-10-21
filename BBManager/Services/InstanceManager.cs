@@ -43,6 +43,9 @@ public class InstanceManager
             if (!await Task.Run(() => Authenticode.IsSignedBy(exe, "Roblox Corporation", out sigDetail)))
                 throw new InvalidOperationException($"Lancement refusé par sécurité : le client Roblox n'est pas signé par Roblox Corporation ({sigDetail}).");
 
+            if (S.MultiInstance && !MultiInstance.Enable())
+                throw new InvalidOperationException(
+                    "Un Roblox déjà ouvert bloque le multi-instance. Ferme tous les Roblox (bouton « Fermer tous les Roblox ») puis réessaie.");
             if (!S.MultiInstance && _app.Accounts.Any(a => a != acc && a.IsRunning))
                 throw new InvalidOperationException(
                     "Le multi-instance est désactivé et un autre compte est déjà en jeu. Active-le dans Paramètres, ou ferme l'autre instance.");

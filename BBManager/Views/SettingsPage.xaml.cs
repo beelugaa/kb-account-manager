@@ -165,7 +165,13 @@ public partial class SettingsPage : UserControl
     // ---- Multi-instance -----------------------------------------------------
     private void OnMultiClick(object sender, RoutedEventArgs e)
     {
-        if (S.MultiInstance) MultiInstance.Enable(); else MultiInstance.Disable();
+        if (S.MultiInstance)
+        {
+            if (!MultiInstance.Enable())
+                MessageDialog.Show(Window.GetWindow(this), "Roblox est déjà ouvert",
+                    "Un client Roblox lancé hors de l'appli bloque le multi-instance. Ferme tous les Roblox (onglet Instances) : il s'activera tout seul.");
+        }
+        else MultiInstance.Disable();
         (Application.Current.MainWindow as MainWindow)?.UpdateMultiCard();
     }
 

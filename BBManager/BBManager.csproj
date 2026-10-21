@@ -10,7 +10,7 @@
     <AssemblyName>KBManager</AssemblyName>
     <RootNamespace>BBManager</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <Product>KB Account Manager</Product>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
