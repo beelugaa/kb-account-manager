@@ -149,6 +149,8 @@ public partial class App : Application
         if (firstRunChanged) app.SaveNow();                     // écrit tout de suite les données sous la nouvelle protection
         if (demo) SeedDemoRuntime(app);
 
+        _ = app.RefreshPlacesAsync();                          // noms et images des jeux favoris qui en manquent (en arrière-plan)
+
         if (settings.MultiInstance) MultiInstance.Enable();   // sinon la carte en bas à gauche explique pourquoi, et réessaie toute seule
 
         // Reprise des instances encore ouvertes depuis la dernière session
@@ -178,6 +180,15 @@ public partial class App : Application
         bool startHidden = !demo && e.Args.Contains("--tray") && settings.StartMinimized;
         if (!startHidden) win.Show();
 
+        // « Nouveautés » : une seule fois après une mise à jour (pas à la toute première installation)
+        if (!demo && !startHidden && settings.LastRunVersion != UpdateService.CurrentText)
+        {
+            bool existingUser = settings.LastRunVersion.Length > 0 || !firstRunChanged;   // première installation : FirstRunDone vient d'être posé
+            settings.LastRunVersion = UpdateService.CurrentText;
+            app.SaveNow();
+            if (existingUser) new WhatsNewDialog { Owner = win }.ShowDialog();
+        }
+
         // Aide au développement : --demo --open=add|edit|group|msg|password ouvre une boîte de dialogue non modale.
         var openArg = e.Args.FirstOrDefault(a => a.StartsWith("--open="))?[7..];
         if (demo && openArg != null)
@@ -187,6 +198,7 @@ public partial class App : Application
                 "add" => new AddAccountsDialog(app, null),
                 "edit" => new EditAccountDialog(app, app.Accounts[0]),
                 "group" => new GroupDialog(),
+                "whatsnew" => new WhatsNewDialog(),
                 "password" => new PasswordDialog(PasswordDialog.PasswordMode.Set),
                 _ => null,
             };
@@ -212,7 +224,7 @@ public partial class App : Application
     {
         var main = new AccountGroup { Name = "Principaux", Color = "#7C5CFF", SortOrder = 0 };
         var alts = new AccountGroup { Name = "Alts farm", Color = "#3DDC97", SortOrder = 1 };
-        var data = new DataFile { Groups = { main, alts }, Places = { new SavedPlace { PlaceId = 920587237, Name = "Adopt Me!" }, new SavedPlace { PlaceId = 189707, Name = "Natural Disaster Survival" } } };
+        var data = new DataFile { Groups = { main, alts }, Places = { new SavedPlace { PlaceId = 920587237, Name = "Adopt Me!" }, new SavedPlace { PlaceId = 189707, Name = "Natural Disaster Survival" }, new SavedPlace { PlaceId = 142823291, Name = "Murder Mystery 2" } } };
         string[] names = { "BluePanda", "xX_Nova_Xx", "FarmAlt01", "FarmAlt02", "FarmAlt03", "Kiwi_Soda", "NightOwl77" };
         for (int i = 0; i < names.Length; i++)
             data.Accounts.Add(new Account

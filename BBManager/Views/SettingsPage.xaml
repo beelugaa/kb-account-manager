@@ -52,8 +52,8 @@
                     <CheckBox x:Name="MultiBox" Margin="0,14,0,0" Content="Autoriser plusieurs fenêtres Roblox en même temps"
                               IsChecked="{Binding MultiInstance}" Click="OnMultiClick"/>
                     <TextBlock Style="{StaticResource Caption}" Margin="48,6,0,0">
-                        L'appli prend le verrou « ROBLOX_singletonMutex » avant Roblox. Si un Roblox était déjà ouvert quand l'appli a démarré,
-                        ferme-le (Instances &gt; « Fermer tous les Roblox ») puis relance l'appli.
+                        Chaque compte s'ouvre dans sa propre fenêtre. Les clients se lancent l'un après l'autre : chacun attend que le précédent
+                        ait fini de démarrer. Désactivé, un compte ne peut pas se lancer tant qu'un autre est déjà en jeu.
                     </TextBlock>
                 </StackPanel>
             </Border>
@@ -307,6 +307,7 @@
                     <CheckBox Margin="0,14,0,0" Content="Chercher les mises à jour automatiquement" IsChecked="{Binding AutoUpdateCheck}"/>
                     <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
                         <Button x:Name="CheckUpdateBtn" Content="Vérifier maintenant" Click="OnCheckUpdate" Margin="0,0,8,0"/>
+                        <Button x:Name="WhatsNewBtn" Content="Voir les nouveautés" Click="OnWhatsNew" Margin="0,0,8,0" AutomationProperties.Name="Voir les nouveautés"/>
                         <Button x:Name="InstallUpdateBtn" Content="Installer la mise à jour" Style="{StaticResource PrimaryButton}" Click="OnInstallUpdate" Visibility="Collapsed"/>
                     </StackPanel>
                     <TextBlock Style="{StaticResource Caption}" Margin="0,10,0,0"

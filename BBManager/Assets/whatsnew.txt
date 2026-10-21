@@ -1,0 +1,6 @@
+- Multi-instance réparé : la dernière version de Roblox (0.744) restait bloquée au démarrage quand l'appli était ouverte. Les comptes se lancent de nouveau côte à côte.
+- Jeux favoris : ajoute un jeu avec l'étoile et l'appli retrouve toute seule son nom et son image. Un clic sur la carte choisit le jeu, clic droit pour l'actualiser ou le retirer.
+- Les listes de jeux (barre de lancement et profils) affichent maintenant l'image de chaque jeu.
+- Nouvel écran « Nouveautés » après chaque mise à jour, rouvrable depuis Paramètres > Mises à jour.
+- La barre de lancement de la page Comptes ne déborde plus : tous les boutons restent visibles.
+- Le raccourci du menu Démarrer permet de retrouver l'appli en tapant « KB » dans la recherche Windows.

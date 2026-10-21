@@ -54,7 +54,18 @@
                 <Grid>
                     <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="12"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                     <ComboBox x:Name="ModeBox" SelectionChanged="OnModeChanged"/>
-                    <ComboBox x:Name="PlaceBox" Grid.Column="2" IsEditable="True" TextSearch.TextPath="Label"/>
+                    <ComboBox x:Name="PlaceBox" Grid.Column="2" IsEditable="True" TextSearch.TextPath="Label">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="24" Height="24" CornerRadius="5" ClipToBounds="True" Background="{StaticResource Bg1Brush}">
+                                        <Image Source="{Binding IconUrl}" Stretch="UniformToFill"/>
+                                    </Border>
+                                    <TextBlock Text="{Binding Label}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </Grid>
                 <TextBox x:Name="ValueBox" Margin="0,8,0,0" Visibility="Collapsed"/>
                 <TextBlock x:Name="GameHint" Style="{StaticResource Caption}" Margin="2,6,0,0"/>

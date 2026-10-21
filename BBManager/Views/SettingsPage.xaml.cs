@@ -147,6 +147,9 @@ public partial class SettingsPage : UserControl
         RefreshUpdateUi();
     }
 
+    private void OnWhatsNew(object sender, RoutedEventArgs e) =>
+        new WhatsNewDialog { Owner = Window.GetWindow(this) }.ShowDialog();
+
     private void OnInstallUpdate(object sender, RoutedEventArgs e) => (Application.Current.MainWindow as MainWindow)?.ShowUpdateDialog();
 
     private void UpdateRamModeInfo()
@@ -162,13 +165,7 @@ public partial class SettingsPage : UserControl
     // ---- Multi-instance -----------------------------------------------------
     private void OnMultiClick(object sender, RoutedEventArgs e)
     {
-        if (S.MultiInstance)
-        {
-            if (!MultiInstance.Enable())
-                MessageDialog.Show(Window.GetWindow(this), "Roblox est déjà ouvert",
-                    "Un client Roblox lancé hors de l'appli détient le verrou. Ferme tous les Roblox (onglet Instances), puis relance KB Manager.");
-        }
-        else MultiInstance.Disable();
+        if (S.MultiInstance) MultiInstance.Enable(); else MultiInstance.Disable();
         (Application.Current.MainWindow as MainWindow)?.UpdateMultiCard();
     }
 

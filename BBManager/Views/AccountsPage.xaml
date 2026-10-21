@@ -140,6 +140,60 @@
 
         <!-- ============ Barre de lancement ============ -->
         <Border Grid.Row="2" Style="{StaticResource Card}" Margin="0,16,0,14" Padding="16,14">
+          <StackPanel>
+            <!-- Jeux favoris : un clic choisit le jeu -->
+            <ListBox x:Name="FavList" Margin="0,0,0,12" Background="Transparent" BorderThickness="0" Padding="0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                     SelectionChanged="OnFavSelected" AutomationProperties.Name="Jeux favoris"
+                     PreviewMouseRightButtonDown="OnFavRightClick">
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Actualiser le nom et l'image" Click="OnFavRefresh"/>
+                        <MenuItem Header="Retirer des favoris" Click="OnFavRemove"/>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+                <ListBox.ItemsPanel><ItemsPanelTemplate><StackPanel Orientation="Horizontal"/></ItemsPanelTemplate></ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Margin" Value="0,0,8,0"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="AutomationProperties.Name" Value="{Binding ShortName}"/>
+                        <Setter Property="ToolTip" Value="{Binding Label}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border x:Name="bd" CornerRadius="10" Padding="6" Background="{StaticResource Bg3Brush}"
+                                            BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
+                                        <ContentPresenter/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource Bg4Brush}"/></Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="bd" Property="Background" Value="{StaticResource AccentSoftBrush}"/>
+                                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="36" Height="36" CornerRadius="8" ClipToBounds="True" Background="{StaticResource Bg1Brush}">
+                                <Grid>
+                                    <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE7FC;" FontSize="16" Foreground="{StaticResource FaintBrush}"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Image Source="{Binding IconUrl}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Grid>
+                            </Border>
+                            <TextBlock Text="{Binding ShortName}" Margin="9,0,4,0" MaxWidth="130" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" FontWeight="Medium"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -151,12 +205,23 @@
                 <StackPanel Orientation="Horizontal">
                     <StackPanel>
                         <TextBlock Text="Jeu (Place ID ou lien)" Style="{StaticResource Caption}" Margin="2,0,0,4"/>
-                        <ComboBox x:Name="PlaceBox" Width="250" IsEditable="True" DisplayMemberPath="Label" TextSearch.TextPath="Label"/>
+                        <ComboBox x:Name="PlaceBox" Width="250" IsEditable="True" TextSearch.TextPath="Label" SelectionChanged="OnPlaceChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="24" Height="24" CornerRadius="5" ClipToBounds="True" Background="{StaticResource Bg1Brush}">
+                                            <Image Source="{Binding IconUrl}" Stretch="UniformToFill"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding Label}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                     </StackPanel>
                     <Button x:Name="StarBtn" FontFamily="{StaticResource IconFont}" Content="&#xE734;" Width="36" Margin="6,19,0,0" Padding="0,7"
-                            ToolTip="Enregistrer ce jeu dans la liste" Click="OnSavePlace"/>
+                            ToolTip="Enregistrer ce jeu dans les favoris" AutomationProperties.Name="Ajouter aux favoris" Click="OnSavePlace"/>
                     <Button x:Name="UnstarBtn" FontFamily="{StaticResource IconFont}" Content="&#xE74D;" Width="36" Margin="6,19,0,0" Padding="0,7"
-                            ToolTip="Retirer ce jeu de la liste" Click="OnRemovePlace"/>
+                            ToolTip="Retirer ce jeu des favoris" AutomationProperties.Name="Retirer des favoris" Click="OnRemovePlace"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="14,0,0,0">
@@ -183,6 +248,7 @@
                             ToolTip="Enregistre les comptes sélectionnés et ce jeu comme profil de lancement (onglet Profils)"/>
                 </StackPanel>
             </Grid>
+          </StackPanel>
         </Border>
 
         <!-- ============ Liste ============ -->

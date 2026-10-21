@@ -134,6 +134,9 @@ public class SavedPlace : ObservableObject
 {
     public long PlaceId { get; set; }
     private string _name = ""; public string Name { get => _name; set { Set(ref _name, value); Raise(nameof(Label)); } }
+    private string _iconUrl = ""; public string IconUrl { get => _iconUrl; set { Set(ref _iconUrl, value); Raise(nameof(HasIcon)); } }
+    [JsonIgnore] public bool HasIcon => IconUrl.Length > 0;
+    [JsonIgnore] public string ShortName => string.IsNullOrWhiteSpace(Name) ? $"Place {PlaceId}" : Name;
     [JsonIgnore] public string Label => string.IsNullOrWhiteSpace(Name) ? PlaceId.ToString() : $"{Name}  ({PlaceId})";
     public override string ToString() => Label;
 }
@@ -224,7 +227,11 @@ public class DataFile
             if (a.PlaceId < 0) a.PlaceId = 0;
         }
         foreach (var g in Groups) { g.Name = Clamp.Str(g.Name, 60); g.Color = Clamp.Color(g.Color, "#7C5CFF"); }
-        foreach (var p in Places) { p.Name = Clamp.Str(p.Name, 120); }
+        foreach (var p in Places)
+        {
+            p.Name = Clamp.Str(p.Name, 120);
+            p.IconUrl = BBManager.Services.RobloxCdn.IsImageUrl(p.IconUrl) ? p.IconUrl : "";   // le fichier est modifiable : on n'affiche que des images du CDN de Roblox
+        }
     }
     public List<Account> Accounts { get; set; } = new();
     public List<AccountGroup> Groups { get; set; } = new();
@@ -251,6 +258,7 @@ public class AppSettings : ObservableObject
         AutoLockMinutes = Clamp.Int(AutoLockMinutes, 0, 1440);
         Accent = Clamp.Color(Accent, "#18B8FF");
         LastJoinValue = Clamp.Str(LastJoinValue, 300);
+        LastRunVersion = Clamp.Str(LastRunVersion, 32);
 
         // Le chemin du client n'est accepté que s'il désigne bien RobloxPlayerBeta.exe (sinon un fichier settings.json
         // modifié pourrait faire exécuter n'importe quel programme au prochain lancement)
@@ -317,6 +325,7 @@ public class AppSettings : ObservableObject
     public int AutoLockMinutes { get; set; } = 10;       // verrouillage après N min sans activité dans l'appli (0 = jamais)
     public bool LockOnTray { get; set; } = true;         // verrouiller quand la fenêtre est masquée dans la barre système
     public bool HideFromCapture { get; set; } = false;   // fenêtre invisible dans les captures / partages d'écran
+    public string LastRunVersion { get; set; } = "";     // dernière version lancée : « Nouveautés » ne s'affiche qu'une fois après une mise à jour
     public bool AutoUpdateCheck { get; set; } = true;    // cherche les mises à jour au démarrage puis toutes les 6 h
 
     // Interface

@@ -74,6 +74,9 @@ public partial class AccountsPage : UserControl
         ValueBox.Text = app.Settings.LastJoinValue;
 
         PlaceBox.ItemsSource = app.Places;
+        FavList.ItemsSource = app.Places;
+        app.Places.CollectionChanged += (_, _) => UpdateFavVisibility();
+        UpdateFavVisibility();
         if (app.Settings.LastPlaceId != 0)
         {
             var sp = app.Places.FirstOrDefault(p => p.PlaceId == app.Settings.LastPlaceId);
@@ -327,6 +330,52 @@ public partial class AccountsPage : UserControl
         if (all.Count > 0 && long.TryParse(all[^1].Value, out var id)) return id;
         bad = true;
         return 0;
+    }
+
+    // ---- Jeux favoris (barre d'images au-dessus du lancement) ----
+    private bool _syncingPlace;
+
+    private void UpdateFavVisibility() => FavList.Visibility = _app.Places.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+    private void OnFavSelected(object sender, SelectionChangedEventArgs e)
+    {
+        if (_syncingPlace || FavList.SelectedItem is not SavedPlace p) return;
+        _syncingPlace = true;
+        PlaceBox.SelectedItem = p;
+        _syncingPlace = false;
+    }
+
+    private void OnPlaceChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_syncingPlace) return;
+        _syncingPlace = true;
+        FavList.SelectedItem = PlaceBox.SelectedItem as SavedPlace;
+        _syncingPlace = false;
+    }
+
+    /// <summary>Clic droit : sélectionne d'abord la carte visée, et n'ouvre pas le menu si on a cliqué à côté.</summary>
+    private void OnFavRightClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        var item = (e.OriginalSource as DependencyObject) is { } d ? ItemsControl.ContainerFromElement(FavList, d) as ListBoxItem : null;
+        if (item == null) { e.Handled = true; return; }
+        item.IsSelected = true;
+    }
+
+    private void OnFavRemove(object sender, RoutedEventArgs e)
+    {
+        var p = FavList.SelectedItem as SavedPlace;
+        if (p == null) return;
+        _app.Places.Remove(p);
+        _app.RequestSave();
+        _app.Status($"{p.ShortName} retiré des favoris.");
+    }
+
+    private async void OnFavRefresh(object sender, RoutedEventArgs e)
+    {
+        var p = FavList.SelectedItem as SavedPlace;
+        if (p == null) return;
+        await _app.RefreshPlaceAsync(p);
+        _app.Status($"{p.ShortName} actualisé.");
     }
 
     private async void OnSavePlace(object sender, RoutedEventArgs e)

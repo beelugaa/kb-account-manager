@@ -273,11 +273,37 @@ public class AppState : ObservableObject
         var p = new SavedPlace { PlaceId = placeId, Name = name ?? "" };
         Places.Add(p);
         RequestSave();
-        if (string.IsNullOrWhiteSpace(p.Name))
-        {
-            var n = await RobloxApi.GetPlaceNameAsync(placeId);
-            if (!string.IsNullOrWhiteSpace(n)) { p.Name = n; RequestSave(); }
-        }
+        await FillPlaceAsync(p);
         return p;
+    }
+
+    /// <summary>Complète le nom et l'icône d'un jeu enregistré (ne remplace pas un nom que tu as saisi toi-même).</summary>
+    private async Task FillPlaceAsync(SavedPlace p)
+    {
+        var info = await RobloxApi.GetGameInfoAsync(p.PlaceId);
+        if (info == null) return;
+        if (string.IsNullOrWhiteSpace(p.Name) && !string.IsNullOrWhiteSpace(info.Name)) p.Name = info.Name;
+        if (info.IconUrl.Length > 0) p.IconUrl = info.IconUrl;
+        RequestSave();
+    }
+
+    /// <summary>Redemande le nom et l'icône à Roblox (le nom est remplacé, contrairement à l'ajout).</summary>
+    public async Task RefreshPlaceAsync(SavedPlace p)
+    {
+        var info = await RobloxApi.GetGameInfoAsync(p.PlaceId);
+        if (info == null) { Status("Impossible de joindre Roblox pour ce jeu.", true); return; }
+        if (!string.IsNullOrWhiteSpace(info.Name)) p.Name = info.Name;
+        if (info.IconUrl.Length > 0) p.IconUrl = info.IconUrl;
+        RequestSave();
+    }
+
+    /// <summary>Au démarrage : récupère le nom et l'image des jeux enregistrés qui n'en ont pas encore (jeux ajoutés avant cette fonction).</summary>
+    public async Task RefreshPlacesAsync(bool all = false)
+    {
+        foreach (var p in Places.Where(x => all || !x.HasIcon || string.IsNullOrWhiteSpace(x.Name)).ToList())
+        {
+            await FillPlaceAsync(p);
+            await Task.Delay(250);
+        }
     }
 }

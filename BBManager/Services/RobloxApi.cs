@@ -8,6 +8,19 @@ namespace BBManager.Services;
 
 public record RobloxUser(long Id, string Name, string DisplayName);
 
+/// <summary>Les images (avatars, icônes de jeux) viennent du CDN de Roblox ; on n'en affiche pas d'autres.</summary>
+public static class RobloxCdn
+{
+    public static bool IsImageUrl(string? url)
+    {
+        if (string.IsNullOrEmpty(url) || url.Length > 512 || !Uri.TryCreate(url, UriKind.Absolute, out var u)) return false;
+        return u.Scheme == Uri.UriSchemeHttps &&
+               (u.Host.EndsWith(".rbxcdn.com", StringComparison.OrdinalIgnoreCase) || u.Host.EndsWith(".roblox.com", StringComparison.OrdinalIgnoreCase));
+    }
+}
+
+public record GameInfo(string Name, string IconUrl);
+
 public static class RobloxApi
 {
     private const string UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
@@ -90,7 +103,10 @@ public static class RobloxApi
         catch { return ""; }
     }
 
-    public static async Task<string?> GetPlaceNameAsync(long placeId)
+    public static async Task<string?> GetPlaceNameAsync(long placeId) => (await GetGameInfoAsync(placeId))?.Name;
+
+    /// <summary>Nom et icône d'un jeu à partir de son Place ID (sans cookie : ces informations sont publiques).</summary>
+    public static async Task<GameInfo?> GetGameInfoAsync(long placeId)
     {
         try
         {
@@ -98,12 +114,29 @@ public static class RobloxApi
             if (!r1.IsSuccessStatusCode) return null;
             using var d1 = JsonDocument.Parse(await r1.Content.ReadAsStringAsync());
             if (!d1.RootElement.TryGetProperty("universeId", out var u) || u.ValueKind != JsonValueKind.Number) return null;
+            long universe = u.GetInt64();
 
-            using var r2 = await Http.SendAsync(Req(HttpMethod.Get, $"https://games.roblox.com/v1/games?universeIds={u.GetInt64()}"));
+            using var r2 = await Http.SendAsync(Req(HttpMethod.Get, $"https://games.roblox.com/v1/games?universeIds={universe}"));
             if (!r2.IsSuccessStatusCode) return null;
             using var d2 = JsonDocument.Parse(await r2.Content.ReadAsStringAsync());
             var arr = d2.RootElement.GetProperty("data");
-            return arr.GetArrayLength() > 0 ? arr[0].GetProperty("name").GetString() : null;
+            if (arr.GetArrayLength() == 0) return null;
+            var name = arr[0].GetProperty("name").GetString() ?? "";
+
+            string icon = "";
+            try
+            {
+                using var r3 = await Http.SendAsync(Req(HttpMethod.Get,
+                    $"https://thumbnails.roblox.com/v1/games/icons?universeIds={universe}&returnPolicy=PlaceHolder&size=150x150&format=Png&isCircular=false"));
+                if (r3.IsSuccessStatusCode)
+                {
+                    using var d3 = JsonDocument.Parse(await r3.Content.ReadAsStringAsync());
+                    var data = d3.RootElement.GetProperty("data");
+                    if (data.GetArrayLength() > 0) icon = data[0].GetProperty("imageUrl").GetString() ?? "";
+                }
+            }
+            catch { }
+            return new GameInfo(name, RobloxCdn.IsImageUrl(icon) ? icon : "");
         }
         catch { return null; }
     }

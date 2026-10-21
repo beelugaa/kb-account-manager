@@ -10,7 +10,7 @@
     <AssemblyName>KBManager</AssemblyName>
     <RootNamespace>BBManager</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <Product>KB Account Manager</Product>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
@@ -25,6 +25,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\update-pubkey.txt" LogicalName="update-pubkey.txt" />
     <EmbeddedResource Include="Assets\update-feed.txt" LogicalName="update-feed.txt" />
+    <EmbeddedResource Include="Assets\whatsnew.txt" LogicalName="whatsnew.txt" />
     <Resource Include="Assets\logo.png" />
     <Resource Include="Assets\icon.ico" />
   </ItemGroup>

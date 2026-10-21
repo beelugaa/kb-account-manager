@@ -39,6 +39,7 @@
 - **Groupes** colorés, recherche, tri, glisser-déposer, et **actions groupées** (alias numérotés, jeu par défaut, RAM, relance auto…).
 - **Profils de lancement** : des comptes + un jeu + des options, lancés en un clic ou **programmés** à heure fixe.
 - Rejoins un jeu, un serveur précis, un serveur privé, un ami, ou simplement l'accueil de Roblox.
+- **Jeux favoris** avec leur nom et leur image : un clic sur la carte et c'est le jeu choisi.
 
 **Performances**
 - **Limite de RAM par fenêtre**, appliquée en continu, avec la mémoire de chaque instance affichée en direct.
@@ -65,8 +66,6 @@
 Prérequis : Windows 10 ou 11 et le [runtime .NET 8 Desktop](https://dotnet.microsoft.com/download/dotnet/8.0) (Windows te propose de l'installer s'il manque).
 Pour désinstaller : *Paramètres Windows › Applications › Applications installées › KB Account Manager*.
 
-> **Important** — Ferme tous tes Roblox **avant** d'ouvrir KB Account Manager la première fois : le multi-instance doit prendre la main avant le client.
-
 ## Mises à jour
 
 L'appli cherche toute seule les nouvelles versions. Quand il y en a une, une carte **Mise à jour disponible** apparaît dans la barre latérale (et une bulle dans la barre système) : un clic, et elle s'installe puis se rouvre. Tes comptes et réglages sont conservés, et tes Roblox ouverts ne sont pas fermés.
@@ -86,9 +85,9 @@ Roblox ignore les touches envoyées à une fenêtre en arrière-plan, donc chaqu
 </details>
 
 <details>
-<summary><b>« Roblox est déjà ouvert » : le multi-instance est bloqué</b></summary>
+<summary><b>Mes comptes se lancent un par un, pas tous en même temps</b></summary>
 
-Un Roblox lancé hors de l'appli tient le verrou. Ferme-le : le multi-instance s'active tout seul quelques secondes plus tard. Une carte en bas à gauche de l'appli explique ce qui bloque.
+C'est voulu : depuis la version 0.743 de Roblox, chaque nouveau client attend que le précédent ait fini de démarrer (quelques secondes). Les fenêtres s'ouvrent donc à la suite, côte à côte, sans rien fermer. Si une fenêtre reste bloquée sur l'écran de démarrage, ferme-la depuis l'onglet Instances et relance le compte.
 </details>
 
 <details>

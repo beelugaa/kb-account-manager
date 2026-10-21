@@ -25,7 +25,11 @@ ap.add_argument('--url')
 ap.add_argument('--bump', choices=['patch', 'minor', 'major'])
 ap.add_argument('--notes', default='')
 ap.add_argument('--publish', action='store_true', help='publie directement la release sur GitHub avec gh (outil connecté à ton compte)')
+ap.add_argument('--notes-file', help="fichier texte (UTF-8) avec les nouveautés, une puce « - … » par ligne")
 a = ap.parse_args()
+if a.notes_file:
+    a.notes = open(a.notes_file, encoding='utf-8').read().strip()
+a.notes = a.notes.replace('\\n', '\n')
 if not a.github and not (a.feed and a.url):
     sys.exit('Indique --github utilisateur/depot, ou bien --feed ET --url.')
 
@@ -54,8 +58,15 @@ if a.github:
 if not os.path.exists(KEY):
     sys.exit('Clé privée introuvable : ' + KEY)
 
-# 1) l'adresse du flux est gravée dans l'appli avant la compilation
+# 1) l'adresse du flux et les nouveautés de cette version sont gravées dans l'appli avant la compilation
 open(FEED_FILE, 'w').write(a.feed.strip())
+WHATSNEW_FILE = os.path.join(ROOT, '..', 'BBManager', 'Assets', 'whatsnew.txt')
+if a.notes.strip():   # sans --notes, on garde le texte déjà présent dans Assets\whatsnew.txt
+    open(WHATSNEW_FILE, 'w', encoding='utf-8').write(a.notes.strip() + '\n')
+elif not os.path.exists(WHATSNEW_FILE):
+    open(WHATSNEW_FILE, 'w', encoding='utf-8').write('- Corrections et améliorations.\n')
+if not a.notes.strip():
+    a.notes = open(WHATSNEW_FILE, encoding='utf-8').read().strip()
 
 # 2) construction de l'installateur (appli + installateur)
 if subprocess.run([sys.executable, os.path.join(ROOT, 'build.py')], cwd=ROOT).returncode != 0:

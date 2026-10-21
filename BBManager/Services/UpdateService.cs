@@ -46,6 +46,9 @@ public class UpdateService : ObservableObject
         Environment.GetEnvironmentVariable("KBM_UPDATE_FEED") is { Length: > 0 } env ? env
         : Resource("update-feed.txt") is { Length: > 0 } f ? f : null;
 
+    /// <summary>Liste des changements de CETTE version, écrite à la publication (release.py) et embarquée dans l'appli.</summary>
+    public static string WhatsNew => Resource("whatsnew.txt") is { Length: > 0 } w ? w : "- Corrections et améliorations.";
+
     private static string? PublicKey => Resource("update-pubkey.txt") is { Length: > 0 } k ? k : null;
 
     public bool IsConfigured => FeedUrl != null && PublicKey != null;
