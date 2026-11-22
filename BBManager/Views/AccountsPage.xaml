@@ -32,6 +32,65 @@
             <Setter Property="Padding" Value="0"/>
         </Style>
 
+        <!-- Barre de recherche en pilule -->
+        <Style x:Key="PillSearchBox" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="999">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Carte de jeu favori : grande vignette avec son image, comme une pochette -->
+        <Style x:Key="FavCard" TargetType="ListBoxItem">
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="AutomationProperties.Name" Value="{Binding ShortName}"/>
+            <Setter Property="ToolTip" Value="{Binding Label}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="bd" Width="108" Height="108" CornerRadius="16" ClipToBounds="True"
+                                Background="{StaticResource Bg3Brush}" BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
+                            <Grid>
+                                <TextBlock FontFamily="{StaticResource EmojiFont}" Text="🎮" FontSize="30" Opacity="0.5"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Image Source="{Binding IconUrl}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Border VerticalAlignment="Bottom" Height="54">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#00000000" Offset="0"/>
+                                            <GradientStop Color="#E6000000" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
+                                <TextBlock Text="{Binding ShortName}" Foreground="White" FontWeight="SemiBold" FontSize="12"
+                                           TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxHeight="34"
+                                           VerticalAlignment="Bottom" Margin="9,0,9,9"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="BorderBrush" Value="#3A3B42"/></Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                                <Setter TargetName="bd" Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <DataTemplate x:Key="AccountRow">
             <Grid Margin="14,10" Background="Transparent">
                 <Grid.ColumnDefinitions>
@@ -109,12 +168,12 @@
             </StackPanel>
 
             <StackPanel Grid.Column="2" Orientation="Horizontal">
-                <Grid Width="230" Margin="0,0,8,0">
-                    <TextBox x:Name="SearchBox" TextChanged="OnSearchChanged" Padding="32,7,10,7"/>
+                <Grid Width="250" Margin="0,0,8,0">
+                    <TextBox x:Name="SearchBox" Style="{StaticResource PillSearchBox}" TextChanged="OnSearchChanged" Padding="36,9,14,9"/>
                     <TextBlock FontFamily="{StaticResource EmojiFont}" Text="🔍"
-                               IsHitTestVisible="False" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                               IsHitTestVisible="False" VerticalAlignment="Center" Margin="14,0,0,0"/>
                     <TextBlock x:Name="SearchHint" Text="Rechercher un compte…" Style="{StaticResource Dim}"
-                               IsHitTestVisible="False" VerticalAlignment="Center" Margin="33,0,0,0"/>
+                               IsHitTestVisible="False" VerticalAlignment="Center" Margin="37,0,0,0"/>
                 </Grid>
                 <ComboBox x:Name="SortBox" Width="180" Margin="0,0,8,0" SelectionChanged="OnSortChanged" ToolTip="Tri"/>
                 <CheckBox x:Name="GroupToggle" Content="Grouper" Margin="6,0,14,0" VerticalAlignment="Center" Click="OnGroupToggle"/>
@@ -142,7 +201,8 @@
         <Border Grid.Row="2" Style="{StaticResource Card}" Margin="0,16,0,14" Padding="16,14">
           <StackPanel>
             <!-- Jeux favoris : un clic choisit le jeu -->
-            <ListBox x:Name="FavList" Margin="0,0,0,12" Background="Transparent" BorderThickness="0" Padding="0"
+            <ListBox x:Name="FavList" Height="118" Margin="0,0,0,12" Background="Transparent" BorderThickness="0" Padding="0"
+                     ItemContainerStyle="{StaticResource FavCard}"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                      SelectionChanged="OnFavSelected" AutomationProperties.Name="Jeux favoris"
                      PreviewMouseRightButtonDown="OnFavRightClick">
@@ -153,45 +213,6 @@
                     </ContextMenu>
                 </ListBox.ContextMenu>
                 <ListBox.ItemsPanel><ItemsPanelTemplate><StackPanel Orientation="Horizontal"/></ItemsPanelTemplate></ListBox.ItemsPanel>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Margin" Value="0,0,8,0"/>
-                        <Setter Property="Cursor" Value="Hand"/>
-                        <Setter Property="AutomationProperties.Name" Value="{Binding ShortName}"/>
-                        <Setter Property="ToolTip" Value="{Binding Label}"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListBoxItem">
-                                    <Border x:Name="bd" CornerRadius="10" Padding="6" Background="{StaticResource Bg3Brush}"
-                                            BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
-                                        <ContentPresenter/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="{StaticResource Bg4Brush}"/></Trigger>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="bd" Property="Background" Value="{StaticResource AccentSoftBrush}"/>
-                                            <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Border Width="36" Height="36" CornerRadius="8" ClipToBounds="True" Background="{StaticResource Bg1Brush}">
-                                <Grid>
-                                    <TextBlock FontFamily="{StaticResource EmojiFont}" Text="🎮" FontSize="16"
-                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    <Image Source="{Binding IconUrl}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
-                                </Grid>
-                            </Border>
-                            <TextBlock Text="{Binding ShortName}" Margin="9,0,4,0" MaxWidth="130" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" FontWeight="Medium"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
             </ListBox>
 
             <Grid>
