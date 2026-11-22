@@ -11,13 +11,13 @@
                     <ControlTemplate TargetType="ToggleButton">
                         <Border Background="Transparent" Padding="2,8,2,6">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock x:Name="arrow" FontFamily="{StaticResource IconFont}" Text="&#xE70D;" FontSize="10"
+                                <TextBlock x:Name="arrow" Text="▾" FontSize="11"
                                            Foreground="{StaticResource DimBrush}" VerticalAlignment="Center" Width="18"/>
                                 <ContentPresenter VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="False"><Setter TargetName="arrow" Property="Text" Value="&#xE76C;"/></Trigger>
+                            <Trigger Property="IsChecked" Value="False"><Setter TargetName="arrow" Property="Text" Value="▸"/></Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -25,7 +25,7 @@
         </Style>
 
         <Style x:Key="IconBtn" TargetType="Button" BasedOn="{StaticResource GhostButton}">
-            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontFamily" Value="{StaticResource EmojiFont}"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Width" Value="34"/>
             <Setter Property="Height" Value="34"/>
@@ -78,10 +78,10 @@
                 <TextBlock Grid.Column="5" Text="{Binding RobuxText}" VerticalAlignment="Center" Foreground="{StaticResource DimBrush}"/>
 
                 <StackPanel Grid.Column="6" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Style="{StaticResource IconBtn}" Content="&#xE768;" ToolTip="Lancer" Click="OnRowLaunch" Foreground="{StaticResource GoodBrush}"/>
-                    <Button Style="{StaticResource IconBtn}" Content="&#xE71A;" ToolTip="Fermer l'instance" Click="OnRowClose"/>
-                    <Button Style="{StaticResource IconBtn}" Content="&#xE70F;" ToolTip="Modifier" Click="OnRowEdit"/>
-                    <Button Style="{StaticResource IconBtn}" Content="&#xE712;" ToolTip="Plus d'actions" Click="OnRowMore"/>
+                    <Button Style="{StaticResource IconBtn}" Content="▶️" ToolTip="Lancer" Click="OnRowLaunch"/>
+                    <Button Style="{StaticResource IconBtn}" Content="⏹️" ToolTip="Fermer l'instance" Click="OnRowClose"/>
+                    <Button Style="{StaticResource IconBtn}" Content="✏️" ToolTip="Modifier" Click="OnRowEdit"/>
+                    <Button FontFamily="{StaticResource UiFont}" Style="{StaticResource IconBtn}" Content="⋯" FontSize="18" ToolTip="Plus d'actions" Click="OnRowMore"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -111,19 +111,19 @@
             <StackPanel Grid.Column="2" Orientation="Horizontal">
                 <Grid Width="230" Margin="0,0,8,0">
                     <TextBox x:Name="SearchBox" TextChanged="OnSearchChanged" Padding="32,7,10,7"/>
-                    <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE721;" Foreground="{StaticResource DimBrush}"
-                               IsHitTestVisible="False" VerticalAlignment="Center" Margin="11,0,0,0"/>
+                    <TextBlock FontFamily="{StaticResource EmojiFont}" Text="🔍"
+                               IsHitTestVisible="False" VerticalAlignment="Center" Margin="10,0,0,0"/>
                     <TextBlock x:Name="SearchHint" Text="Rechercher un compte…" Style="{StaticResource Dim}"
                                IsHitTestVisible="False" VerticalAlignment="Center" Margin="33,0,0,0"/>
                 </Grid>
                 <ComboBox x:Name="SortBox" Width="180" Margin="0,0,8,0" SelectionChanged="OnSortChanged" ToolTip="Tri"/>
                 <CheckBox x:Name="GroupToggle" Content="Grouper" Margin="6,0,14,0" VerticalAlignment="Center" Click="OnGroupToggle"/>
-                <Button FontFamily="{StaticResource IconFont}" Content="&#xE72C;" Width="38" Margin="0,0,8,0" Padding="0,7"
+                <Button FontFamily="{StaticResource EmojiFont}" Content="🔄" Width="38" Margin="0,0,8,0" Padding="0,7"
                         ToolTip="Vérifier tous les comptes (cookies, Robux, avatars)" Click="OnRefreshAll"/>
                 <Button Style="{StaticResource PrimaryButton}" Click="OnAddClick" x:Name="AddBtn" AutomationProperties.Name="Ajouter un compte">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE710;" Foreground="White" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Ajouter" Foreground="White"/>
+                        <TextBlock FontFamily="{StaticResource EmojiFont}" Text="➕" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Ajouter" Foreground="{StaticResource OnAccentBrush}"/>
                     </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu>
@@ -183,7 +183,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Border Width="36" Height="36" CornerRadius="8" ClipToBounds="True" Background="{StaticResource Bg1Brush}">
                                 <Grid>
-                                    <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE7FC;" FontSize="16" Foreground="{StaticResource FaintBrush}"
+                                    <TextBlock FontFamily="{StaticResource EmojiFont}" Text="🎮" FontSize="16"
                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     <Image Source="{Binding IconUrl}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 </Grid>
@@ -218,9 +218,9 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
-                    <Button x:Name="StarBtn" FontFamily="{StaticResource IconFont}" Content="&#xE734;" Width="36" Margin="6,19,0,0" Padding="0,7"
+                    <Button x:Name="StarBtn" FontFamily="{StaticResource EmojiFont}" Content="⭐" Width="36" Margin="6,19,0,0" Padding="0,7"
                             ToolTip="Enregistrer ce jeu dans les favoris" AutomationProperties.Name="Ajouter aux favoris" Click="OnSavePlace"/>
-                    <Button x:Name="UnstarBtn" FontFamily="{StaticResource IconFont}" Content="&#xE74D;" Width="36" Margin="6,19,0,0" Padding="0,7"
+                    <Button x:Name="UnstarBtn" FontFamily="{StaticResource EmojiFont}" Content="🗑️" Width="36" Margin="6,19,0,0" Padding="0,7"
                             ToolTip="Retirer ce jeu des favoris" AutomationProperties.Name="Retirer des favoris" Click="OnRemovePlace"/>
                 </StackPanel>
 
@@ -238,8 +238,8 @@
                     <Button x:Name="CancelBtn" Content="Annuler le lancement" Style="{StaticResource DangerButton}" Margin="0,0,8,0" Visibility="Collapsed" Click="OnCancelLaunch"/>
                     <Button x:Name="LaunchSelBtn" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0" Click="OnLaunchSelected" Padding="16,8">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE768;" Foreground="White" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="LaunchSelText" Text="Lancer" Foreground="White"/>
+                            <TextBlock FontFamily="{StaticResource EmojiFont}" Text="▶️" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="LaunchSelText" Text="Lancer" Foreground="{StaticResource OnAccentBrush}"/>
                         </StackPanel>
                     </Button>
                     <Button x:Name="LaunchAllBtn" Content="Tout lancer" Padding="16,8" Click="OnLaunchAll" Margin="0,0,8,0"
@@ -309,7 +309,7 @@
             </ListBox>
 
             <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
-                <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE716;" FontSize="44" Foreground="{StaticResource FaintBrush}" HorizontalAlignment="Center"/>
+                <TextBlock FontFamily="{StaticResource EmojiFont}" Text="👤" FontSize="40" Opacity="0.45" HorizontalAlignment="Center"/>
                 <TextBlock x:Name="EmptyTitle" Text="Aucun compte" Style="{StaticResource H2}" HorizontalAlignment="Center" Margin="0,12,0,4"/>
                 <TextBlock x:Name="EmptyText" Style="{StaticResource Dim}" HorizontalAlignment="Center" TextAlignment="Center"/>
             </StackPanel>

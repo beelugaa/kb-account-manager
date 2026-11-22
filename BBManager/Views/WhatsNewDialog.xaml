@@ -5,7 +5,7 @@
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Background="{StaticResource Bg1Brush}">
     <StackPanel Margin="28,26,28,22">
         <StackPanel Orientation="Horizontal">
-            <Border Width="48" Height="48" CornerRadius="12" ClipToBounds="True" Background="#00020F" BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
+            <Border Width="48" Height="48" CornerRadius="12" ClipToBounds="True" Background="{StaticResource Bg0Brush}" BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
                 <Image Source="/Assets/logo.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
             </Border>
             <StackPanel Margin="14,0,0,0" VerticalAlignment="Center">

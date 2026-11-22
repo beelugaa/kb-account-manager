@@ -104,9 +104,11 @@ public class Account : ObservableObject
     [JsonIgnore] public string LastUsedText => LastUsed == null ? "jamais" : LastUsed.Value.ToString("dd/MM HH:mm");
 
     // 0 = hors ligne, 1 = en jeu, 2 = cookie invalide, 3 = occupé
-    [JsonIgnore] public int StatusKind => IsBusy ? 3 : !CookieValid ? 2 : IsRunning ? 1 : 0;
+    // Un compte réellement en jeu doit toujours s'afficher comme tel, même si une vérification de cookie
+    // a échoué pendant ce temps (hoquet réseau) : IsRunning passe donc avant CookieValid.
+    [JsonIgnore] public int StatusKind => IsBusy ? 3 : IsRunning ? 1 : !CookieValid ? 2 : 0;
     [JsonIgnore] public string StatusText =>
-        IsBusy ? BusyText : !CookieValid ? "Cookie invalide" : IsRunning ? $"En jeu · PID {Pid}" : "Hors ligne";
+        IsBusy ? BusyText : IsRunning ? $"En jeu · PID {Pid}" : !CookieValid ? "Cookie invalide" : "Hors ligne";
 
     public void TickUptime() => Raise(nameof(UptimeText));
 
@@ -256,7 +258,7 @@ public class AppSettings : ObservableObject
         AfkGapSec = Clamp.Int(AfkGapSec, 5, 600);
         AfkIdleGateSec = Clamp.Int(AfkIdleGateSec, 2, 600);
         AutoLockMinutes = Clamp.Int(AutoLockMinutes, 0, 1440);
-        Accent = Clamp.Color(Accent, "#18B8FF");
+        Accent = Clamp.Color(Accent, "#D8B36B");
         LastJoinValue = Clamp.Str(LastJoinValue, 300);
         LastRunVersion = Clamp.Str(LastRunVersion, 32);
 
@@ -329,7 +331,7 @@ public class AppSettings : ObservableObject
     public bool AutoUpdateCheck { get; set; } = true;    // cherche les mises à jour au démarrage puis toutes les 6 h
 
     // Interface
-    public string Accent { get; set; } = "#18B8FF";
+    public string Accent { get; set; } = "#D8B36B";
     public string SortMode { get; set; } = "Manuel";
     public bool GroupView { get; set; } = true;
     public bool Encrypted { get; set; } = false;         // info : mot de passe maître actif

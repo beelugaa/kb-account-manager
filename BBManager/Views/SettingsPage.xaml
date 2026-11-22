@@ -7,9 +7,8 @@
             <Setter Property="Padding" Value="22,20"/>
         </Style>
         <Style x:Key="SectionIcon" TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontFamily" Value="{StaticResource EmojiFont}"/>
             <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
             <Setter Property="Margin" Value="0,2,12,0"/>
         </Style>
         <Style x:Key="Row" TargetType="Grid">
@@ -46,7 +45,7 @@
             <Border x:Name="SecMulti" Style="{StaticResource Section}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE7F4;"/>
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="🖥️"/>
                         <TextBlock Text="Multi-instance" Style="{StaticResource H2}"/>
                     </StackPanel>
                     <CheckBox x:Name="MultiBox" Margin="0,14,0,0" Content="Autoriser plusieurs fenêtres Roblox en même temps"
@@ -63,7 +62,7 @@
             <Border x:Name="SecFps" Style="{StaticResource Section}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE9D9;"/>
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="🎮"/>
                         <TextBlock Text="FPS et client Roblox" Style="{StaticResource H2}"/>
                     </StackPanel>
 
@@ -127,7 +126,7 @@
                                     <CheckBox IsChecked="{Binding Enabled}" Margin="0,0,10,0" VerticalAlignment="Center"/>
                                     <TextBox Grid.Column="1" Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" FontFamily="Consolas" Margin="0,0,8,0"/>
                                     <TextBox Grid.Column="2" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" FontFamily="Consolas"/>
-                                    <Button Grid.Column="3" Content="&#xE74D;" FontFamily="{StaticResource IconFont}" Style="{StaticResource GhostButton}"
+                                    <Button Grid.Column="3" Content="🗑️" FontFamily="{StaticResource EmojiFont}" Style="{StaticResource GhostButton}"
                                             Margin="6,0,0,0" Click="OnRemoveFlag" ToolTip="Supprimer"/>
                                 </Grid>
                             </DataTemplate>
@@ -147,7 +146,7 @@
             <Border x:Name="SecRam" Style="{StaticResource Section}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE950;"/>
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="🧠"/>
                         <TextBlock Text="Mémoire et processeur" Style="{StaticResource H2}"/>
                     </StackPanel>
 
@@ -213,7 +212,7 @@
             <Border x:Name="SecLaunch" Style="{StaticResource Section}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE768;"/>
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="▶️"/>
                         <TextBlock Text="Lancement et fenêtres" Style="{StaticResource H2}"/>
                     </StackPanel>
 
@@ -282,7 +281,7 @@
             <Border x:Name="SecApp" Style="{StaticResource Section}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE7E8;"/>
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="📦"/>
                         <TextBlock Text="Application" Style="{StaticResource H2}"/>
                     </StackPanel>
                     <CheckBox Margin="0,14,0,0" Content="Démarrer KB Manager avec Windows" IsChecked="{Binding StartWithWindows}" Click="OnStartupClick"/>
@@ -300,7 +299,7 @@
             <Border x:Name="SecUpdate" Style="{StaticResource Section}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE896;"/>
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="⬆️"/>
                         <TextBlock Text="Mises à jour" Style="{StaticResource H2}"/>
                     </StackPanel>
                     <TextBlock x:Name="VersionInfo" Margin="0,14,0,0" FontWeight="Medium"/>
@@ -320,7 +319,7 @@
             <Border x:Name="SecSecurity" Style="{StaticResource Section}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE72E;"/>
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="🔐"/>
                         <TextBlock Text="Sécurité et données" Style="{StaticResource H2}"/>
                     </StackPanel>
 
@@ -362,7 +361,7 @@
             <Border x:Name="SecLook" Style="{StaticResource Section}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource SectionIcon}" Text="&#xE790;"/>
+                        <TextBlock Style="{StaticResource SectionIcon}" Text="🎨"/>
                         <TextBlock Text="Apparence" Style="{StaticResource H2}"/>
                     </StackPanel>
                     <TextBlock Text="Couleur d'accent" FontWeight="Medium" Margin="0,14,0,8"/>

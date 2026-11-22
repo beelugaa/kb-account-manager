@@ -17,7 +17,8 @@
             <core:RamLimitTextConverter x:Key="RamLimitText"/>
             <core:GroupNameColorConverter x:Key="GroupNameColor"/>
             <BooleanToVisibilityConverter x:Key="BoolVisible"/>
-            <FontFamily x:Key="IconFont">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+            <!-- Police pour garantir le rendu en couleur des emoji (WPF ne colorise pas toujours via le fallback de police) -->
+            <FontFamily x:Key="EmojiFont">Segoe UI Emoji</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

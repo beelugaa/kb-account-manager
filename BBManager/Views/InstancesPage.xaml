@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Resources>
         <Style x:Key="IconBtn" TargetType="Button" BasedOn="{StaticResource GhostButton}">
-            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontFamily" Value="{StaticResource EmojiFont}"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Width" Value="34"/>
             <Setter Property="Height" Value="34"/>
@@ -99,9 +99,9 @@
                             </StackPanel>
 
                             <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
-                                <Button Style="{StaticResource IconBtn}" Content="&#xE8A7;" ToolTip="Mettre au premier plan" Click="OnFocus"/>
-                                <Button Style="{StaticResource IconBtn}" Content="&#xE72C;" ToolTip="Relancer" Click="OnRelaunch"/>
-                                <Button Style="{StaticResource IconBtn}" Content="&#xE711;" ToolTip="Fermer" Click="OnClose" Foreground="{StaticResource BadBrush}"/>
+                                <Button Style="{StaticResource IconBtn}" Content="🪟" ToolTip="Mettre au premier plan" Click="OnFocus"/>
+                                <Button Style="{StaticResource IconBtn}" Content="🔄" ToolTip="Relancer" Click="OnRelaunch"/>
+                                <Button FontFamily="{StaticResource UiFont}" Style="{StaticResource IconBtn}" Content="✕" FontSize="15" ToolTip="Fermer" Click="OnClose" Foreground="{StaticResource BadBrush}"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
@@ -109,7 +109,7 @@
             </ListBox>
 
             <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE7F4;" FontSize="44" Foreground="{StaticResource FaintBrush}" HorizontalAlignment="Center"/>
+                <TextBlock FontFamily="{StaticResource EmojiFont}" Text="🖥️" FontSize="40" Opacity="0.45" HorizontalAlignment="Center"/>
                 <TextBlock Text="Aucune instance en cours" Style="{StaticResource H2}" HorizontalAlignment="Center" Margin="0,12,0,4"/>
                 <TextBlock Text="Lance des comptes depuis l'onglet Comptes : ils apparaîtront ici avec leur RAM en direct." Style="{StaticResource Dim}"/>
             </StackPanel>

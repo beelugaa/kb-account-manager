@@ -9,7 +9,7 @@ namespace BBManager.Views;
 public partial class GroupDialog : Window
 {
     public static readonly string[] Palette =
-        { "#18B8FF", "#7C5CFF", "#3D8BFF", "#2EC4B6", "#3DDC97", "#FFB84D", "#FF7A45", "#FF5C7A", "#D65CFF", "#8B91A1" };
+        { "#D8B36B", "#18B8FF", "#7C5CFF", "#3D8BFF", "#2EC4B6", "#3DDC97", "#FFB84D", "#FF7A45", "#FF5C7A", "#D65CFF", "#8B91A1" };
 
     private string _color;
     public string GroupName => NameBox.Text.Trim();

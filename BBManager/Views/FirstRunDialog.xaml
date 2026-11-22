@@ -4,7 +4,7 @@
         Title="Bienvenue" Width="480" SizeToContent="Height" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen" Background="{StaticResource Bg1Brush}">
     <StackPanel Margin="30,28,30,24">
-        <Border Width="64" Height="64" CornerRadius="16" ClipToBounds="True" Background="#00020F" BorderBrush="{StaticResource LineBrush}"
+        <Border Width="64" Height="64" CornerRadius="16" ClipToBounds="True" Background="{StaticResource Bg0Brush}" BorderBrush="{StaticResource LineBrush}"
                 BorderThickness="1" HorizontalAlignment="Left">
             <Image Source="/Assets/logo.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
         </Border>

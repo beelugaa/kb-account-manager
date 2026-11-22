@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Resources>
         <Style x:Key="IconBtn" TargetType="Button" BasedOn="{StaticResource GhostButton}">
-            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontFamily" Value="{StaticResource EmojiFont}"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Width" Value="36"/>
             <Setter Property="Height" Value="36"/>
@@ -26,8 +26,8 @@
             </StackPanel>
             <Button Grid.Column="1" Style="{StaticResource PrimaryButton}" Click="OnNew" VerticalAlignment="Center" AutomationProperties.Name="Nouveau profil">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE710;" Foreground="White" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                    <TextBlock Text="Nouveau profil" Foreground="White"/>
+                    <TextBlock FontFamily="{StaticResource EmojiFont}" Text="➕" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Nouveau profil" Foreground="{StaticResource OnAccentBrush}"/>
                 </StackPanel>
             </Button>
         </Grid>
@@ -47,13 +47,13 @@
                                 <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
                                     <Border Style="{StaticResource Chip}" Margin="0,0,8,0">
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE768;" FontSize="10" Margin="0,1,6,0" VerticalAlignment="Center" Foreground="{StaticResource DimBrush}"/>
+                                            <TextBlock FontFamily="{StaticResource EmojiFont}" Text="▶️" FontSize="10" Margin="0,1,6,0" VerticalAlignment="Center"/>
                                             <TextBlock Text="{Binding GameText}" FontSize="11.5" MaxWidth="300"/>
                                         </StackPanel>
                                     </Border>
                                     <Border Style="{StaticResource Chip}">
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE823;" FontSize="10" Margin="0,1,6,0" VerticalAlignment="Center" Foreground="{StaticResource DimBrush}"/>
+                                            <TextBlock FontFamily="{StaticResource EmojiFont}" Text="⏰" FontSize="10" Margin="0,1,6,0" VerticalAlignment="Center"/>
                                             <TextBlock Text="{Binding ScheduleText}" FontSize="11.5"/>
                                         </StackPanel>
                                     </Border>
@@ -61,9 +61,9 @@
                             </StackPanel>
                             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                 <Button Content="Lancer" Style="{StaticResource PrimaryButton}" Padding="18,8" Margin="0,0,6,0" Click="OnLaunch"/>
-                                <Button Style="{StaticResource IconBtn}" Content="&#xE70F;" ToolTip="Modifier" Click="OnEdit"/>
-                                <Button Style="{StaticResource IconBtn}" Content="&#xE8C8;" ToolTip="Dupliquer" Click="OnDuplicate"/>
-                                <Button Style="{StaticResource IconBtn}" Content="&#xE74D;" ToolTip="Supprimer" Click="OnDelete" Foreground="{StaticResource BadBrush}"/>
+                                <Button Style="{StaticResource IconBtn}" Content="✏️" ToolTip="Modifier" Click="OnEdit"/>
+                                <Button Style="{StaticResource IconBtn}" Content="📋" ToolTip="Dupliquer" Click="OnDuplicate"/>
+                                <Button Style="{StaticResource IconBtn}" Content="🗑️" ToolTip="Supprimer" Click="OnDelete"/>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
@@ -71,7 +71,7 @@
             </ListBox>
 
             <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE8FD;" FontSize="44" Foreground="{StaticResource FaintBrush}" HorizontalAlignment="Center"/>
+                <TextBlock FontFamily="{StaticResource EmojiFont}" Text="🗂️" FontSize="40" Opacity="0.45" HorizontalAlignment="Center"/>
                 <TextBlock Text="Aucun profil pour l'instant" Style="{StaticResource H2}" HorizontalAlignment="Center" Margin="0,12,0,4"/>
                 <TextBlock Style="{StaticResource Dim}" HorizontalAlignment="Center" TextAlignment="Center"
                            Text="Clique sur « Nouveau profil », ou sélectionne des comptes dans l'onglet Comptes puis « + Profil »."/>

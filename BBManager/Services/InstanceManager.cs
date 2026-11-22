@@ -61,6 +61,20 @@ public class InstanceManager
             RobloxClient.ApplyFlags(S, exe);
             if (S.ForceWindowed) RobloxClient.ForceWindowed();
 
+            // On résout d'abord la cible (place/serveur privé/utilisateur : peut faire un ou deux appels réseau),
+            // et on ne va chercher le ticket d'authentification qu'ensuite, juste avant de lancer le client.
+            // Un ticket Roblox n'est valable que quelques secondes : le demander trop tôt (avant une résolution
+            // lente) le laisse parfois expirer, et le client se referme alors immédiatement ("ticket refusé").
+            string label, placeUrl = "";
+            if (req.Mode != JoinMode.Home)
+            {
+                acc.BusyText = "Résolution de la cible…";
+                var (url, lbl) = await BuildPlaceLauncherUrlAsync(acc, req);
+                placeUrl = url;
+                label = lbl;
+            }
+            else label = "accueil de Roblox";
+
             acc.BusyText = "Connexion à Roblox…";
             string ticket;
             try { ticket = await RobloxApi.GetAuthTicketAsync(acc.Cookie); }
@@ -69,19 +83,15 @@ public class InstanceManager
 
             var bt = Random.Shared.NextInt64(100000, 175000) * 1_000_000L + Random.Shared.Next(100000, 999999);
             var launchTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            string arg, label;
+            string arg;
             if (req.Mode == JoinMode.Home)
             {
                 // Ouvre le client sur l'accueil de Roblox, sans rejoindre de jeu.
-                label = "accueil de Roblox";
                 arg = $"roblox-player:1+launchmode:app+gameinfo:{ticket}+launchtime:{launchTime}" +
                       $"+browsertrackerid:{bt}+robloxLocale:en_us+gameLocale:en_us+channel:+LaunchExp:InApp";
             }
             else
             {
-                acc.BusyText = "Résolution de la cible…";
-                var (placeUrl, lbl) = await BuildPlaceLauncherUrlAsync(acc, req);
-                label = lbl;
                 arg = $"roblox-player:1+launchmode:play+gameinfo:{ticket}+launchtime:{launchTime}" +
                       $"+placelauncherurl:{Uri.EscapeDataString(placeUrl)}+browsertrackerid:{bt}" +
                       "+robloxLocale:en_us+gameLocale:en_us+channel:+LaunchExp:InApp";
@@ -589,6 +599,7 @@ public class InstanceManager
         acc.StartedAt = startedAt;
         acc.IsRunning = true;
         acc.UserClosed = false;
+        acc.CookieValid = true;    // il tourne bel et bien : une vérification ratée avant ne veut plus rien dire
         acc.LastLaunch = req;
         acc.NextAfkAt = PickSlot(acc, initial: true);
         ApplyProcessSettings(acc);

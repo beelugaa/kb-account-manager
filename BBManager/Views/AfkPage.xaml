@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.Resources>
         <Style x:Key="IconBtn" TargetType="Button" BasedOn="{StaticResource GhostButton}">
-            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontFamily" Value="{StaticResource EmojiFont}"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Width" Value="34"/>
             <Setter Property="Height" Value="34"/>
@@ -101,7 +101,7 @@
 
                             <CheckBox Grid.Column="3" IsChecked="{Binding AntiAfk}" VerticalAlignment="Center" Margin="0,0,10,0"
                                       ToolTip="Anti-AFK pour ce compte" Click="OnRowToggle"/>
-                            <Button Grid.Column="4" Style="{StaticResource IconBtn}" Content="&#xE768;" ToolTip="Envoyer l'AFK maintenant"
+                            <Button Grid.Column="4" Style="{StaticResource IconBtn}" Content="▶️" ToolTip="Envoyer l'AFK maintenant"
                                     Click="OnRowSend"/>
                         </Grid>
                     </DataTemplate>
@@ -109,7 +109,7 @@
             </ListBox>
 
             <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE823;" FontSize="44" Foreground="{StaticResource FaintBrush}" HorizontalAlignment="Center"/>
+                <TextBlock FontFamily="{StaticResource EmojiFont}" Text="🤖" FontSize="40" Opacity="0.45" HorizontalAlignment="Center"/>
                 <TextBlock Text="Aucun compte en jeu" Style="{StaticResource H2}" HorizontalAlignment="Center" Margin="0,12,0,4"/>
                 <TextBlock Text="Lance des comptes, ou coche « Afficher aussi les comptes hors ligne » pour préparer leurs réglages."
                            Style="{StaticResource Dim}" TextAlignment="Center"/>

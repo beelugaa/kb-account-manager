@@ -20,7 +20,7 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" Margin="6,0,0,22">
-                    <Border Width="40" Height="40" CornerRadius="10" ClipToBounds="True" Background="#00020F"
+                    <Border Width="40" Height="40" CornerRadius="10" ClipToBounds="True" Background="{StaticResource Bg0Brush}"
                             BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
                         <Image Source="/Assets/logo.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
                     </Border>
@@ -33,36 +33,36 @@
                 <StackPanel Grid.Row="1">
                     <RadioButton x:Name="NavAccounts" Style="{StaticResource NavButton}" IsChecked="True" Checked="OnNav" Tag="accounts">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE716;" FontSize="16" Width="26" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                            <TextBlock FontFamily="{StaticResource EmojiFont}" Text="👤" FontSize="16" Width="26"/>
                             <TextBlock Text="Comptes" FontWeight="Medium" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton x:Name="NavProfiles" Style="{StaticResource NavButton}" Checked="OnNav" Tag="profiles">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE8FD;" FontSize="16" Width="26" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                            <TextBlock FontFamily="{StaticResource EmojiFont}" Text="🗂️" FontSize="16" Width="26"/>
                             <TextBlock Text="Profils" FontWeight="Medium" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton x:Name="NavInstances" Style="{StaticResource NavButton}" Checked="OnNav" Tag="instances">
                         <Grid>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE7F4;" FontSize="16" Width="26" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                                <TextBlock FontFamily="{StaticResource EmojiFont}" Text="🖥️" FontSize="16" Width="26"/>
                                 <TextBlock Text="Instances" FontWeight="Medium" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
                             </StackPanel>
                             <Border HorizontalAlignment="Right" Style="{StaticResource Chip}" Background="{DynamicResource AccentBrush}" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding RunningCount}" FontSize="11" FontWeight="SemiBold" Foreground="White"/>
+                                <TextBlock Text="{Binding RunningCount}" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource OnAccentBrush}"/>
                             </Border>
                         </Grid>
                     </RadioButton>
                     <RadioButton x:Name="NavAfk" Style="{StaticResource NavButton}" Checked="OnNav" Tag="afk">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE823;" FontSize="16" Width="26" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                            <TextBlock FontFamily="{StaticResource EmojiFont}" Text="🤖" FontSize="16" Width="26"/>
                             <TextBlock Text="Anti-AFK" FontWeight="Medium" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton x:Name="NavSettings" Style="{StaticResource NavButton}" Checked="OnNav" Tag="settings">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE713;" FontSize="16" Width="26" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                            <TextBlock FontFamily="{StaticResource EmojiFont}" Text="⚙️" FontSize="16" Width="26"/>
                             <TextBlock Text="Paramètres" FontWeight="Medium" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
                         </StackPanel>
                     </RadioButton>
@@ -74,7 +74,7 @@
                             MouseLeftButtonUp="OnUpdateCardClick">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock FontFamily="{StaticResource IconFont}" Text="&#xE896;" Foreground="{DynamicResource AccentBrush}" Margin="0,1,8,0"/>
+                                <TextBlock FontFamily="{StaticResource EmojiFont}" Text="⬆️" Margin="0,1,8,0"/>
                                 <TextBlock Text="Mise à jour disponible" FontWeight="SemiBold"/>
                             </StackPanel>
                             <TextBlock x:Name="UpdateCardText" Style="{StaticResource Caption}" Margin="0,4,0,0"/>
@@ -124,7 +124,7 @@
         <!-- ============ Écran de verrouillage ============ -->
         <Grid x:Name="LockLayer" Grid.ColumnSpan="2" Background="{StaticResource Bg0Brush}" Visibility="Collapsed" Panel.ZIndex="100">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="330">
-                <Border Width="72" Height="72" CornerRadius="18" ClipToBounds="True" Background="#00020F" BorderBrush="{StaticResource LineBrush}"
+                <Border Width="72" Height="72" CornerRadius="18" ClipToBounds="True" Background="{StaticResource Bg0Brush}" BorderBrush="{StaticResource LineBrush}"
                         BorderThickness="1" HorizontalAlignment="Center">
                     <Image Source="/Assets/logo.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
                 </Border>
