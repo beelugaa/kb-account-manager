@@ -1,4 +1,1 @@
-- Nouveau look : thème entièrement revu en noir avec un accent doré, plus sobre et plus propre.
-- Les icônes moches de Windows ont été remplacées par de vrais emoji colorés dans toute l'appli.
-- Correction : un compte en jeu ne s'affiche plus comme "hors ligne"/"cookie invalide" après un simple raté réseau pendant une vérification.
-- Correction : le lancement échouait parfois sans raison (ticket Roblox expiré) ; il est maintenant demandé juste avant de lancer le client, ce qui le rend plus fiable.
+- Boutons et cartes affinés : lustre doré sur les boutons principaux, grandes vignettes avec image pour les jeux favoris, barre de recherche en pilule.
