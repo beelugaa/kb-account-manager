@@ -1,6 +1,4 @@
-- Multi-instance réparé pour la dernière version de Roblox (0.744) : lancer un compte ne ferme plus la fenêtre déjà ouverte, et rien ne reste bloqué au démarrage.
-- Jeux favoris : ajoute un jeu avec l'étoile et l'appli retrouve toute seule son nom et son image. Un clic sur la carte choisit le jeu, clic droit pour l'actualiser ou le retirer.
-- Les listes de jeux (barre de lancement et profils) affichent maintenant l'image de chaque jeu.
-- Nouvel écran « Nouveautés » après chaque mise à jour, rouvrable depuis Paramètres > Mises à jour.
-- La barre de lancement de la page Comptes ne déborde plus : tous les boutons restent visibles.
-- Le raccourci du menu Démarrer permet de retrouver l'appli en tapant « KB » dans la recherche Windows.
+- Nouveau look : thème entièrement revu en noir avec un accent doré, plus sobre et plus propre.
+- Les icônes moches de Windows ont été remplacées par de vrais emoji colorés dans toute l'appli.
+- Correction : un compte en jeu ne s'affiche plus comme "hors ligne"/"cookie invalide" après un simple raté réseau pendant une vérification.
+- Correction : le lancement échouait parfois sans raison (ticket Roblox expiré) ; il est maintenant demandé juste avant de lancer le client, ce qui le rend plus fiable.
